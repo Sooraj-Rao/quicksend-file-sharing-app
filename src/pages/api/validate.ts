@@ -17,7 +17,7 @@ export default async function handler(
     } else {
       res.json({
         error: true,
-        message: "Invalid Code",
+        message: "The Code is Invalid or Expired",
         file: { url: null, name: null },
       });
     }

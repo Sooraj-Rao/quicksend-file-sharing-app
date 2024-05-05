@@ -1,16 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { CodeInput } from "@/components/CodeInput";
-import { useEffect, useState } from "react";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRef, useState } from "react";
 import { filesize } from "filesize";
 import {
   getDownloadURL,
@@ -20,8 +12,10 @@ import {
 } from "firebase/storage";
 import { app } from "@/shared/libs/config/firebase";
 import axios from "axios";
-import { Plus, Upload, X } from "lucide-react";
+import { Copy, Plus, Upload, X } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 const ShareFIle = ({ setOperation }) => {
   const [selectedFile, setSelectedFile] = useState("");
@@ -30,6 +24,8 @@ const ShareFIle = ({ setOperation }) => {
   const [width, setWidth] = useState(0);
   const [loader, setloader] = useState(false);
   const storage = getStorage(app);
+  const codeRef = useRef();
+  const { toast } = useToast();
 
   let progress;
 
@@ -91,15 +87,26 @@ const ShareFIle = ({ setOperation }) => {
       setloader(false);
     }
   };
+
+  const CopyURL = async () => {
+    if (!codeRef.current) return;
+    toast({
+      description: "URL Copied to the clipboard",
+    });
+    // codeRef.current.focus();
+    codeRef.current.select();
+    await window.navigator.clipboard.writeText(codeRef.current);
+  };
+
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[350px]  shadow-lg">
       <CardHeader>
         <CardTitle>Share a File</CardTitle>
       </CardHeader>
       <CardFooter className=" flex flex-col ">
         {selectedFile ? (
           <>
-            <div className=" border border-gray-800  w-full py-2 px-4 rounded ">
+            <div className=" border dark:border-gray-800 border-gray-300  w-full py-2 px-4 rounded ">
               <div className="flex justify-between items-center">
                 <div>
                   <h1>{selectedFile?.name}</h1>
@@ -115,7 +122,7 @@ const ShareFIle = ({ setOperation }) => {
                     setWidth(0);
                   }}
                 >
-                  <X className=" hover:brightness-75 cursor-pointer" />
+                  <X className="  hover:opacity-50 duration-300 cursor-pointer" />
                 </span>
               </div>
             </div>
@@ -131,8 +138,11 @@ const ShareFIle = ({ setOperation }) => {
               )}
               {loader ? (
                 <div className=" w-full">
-                  <Progress value={40} className=" min-w-60" />
-                  {width}%
+                  <Progress value={width} className=" min-w-60" />
+                  <div className=" flex gap-x-2 my-3 items-center">
+                    <span>{width.toFixed(0)}%</span>
+                    <h3 className=" h-4 w-4 border-2 dark:border-white border-black border-t-transparent rounded-full animate-spin"></h3>
+                  </div>
                 </div>
               ) : (
                 ""
@@ -144,13 +154,19 @@ const ShareFIle = ({ setOperation }) => {
                   <h4 className=" text-sm">
                     Share this Secret code for the file access{" "}
                   </h4>
-                  <h1 className=" text-xl text-center my-4">{secretCode}</h1>
+                  <div className=" flex items-center justify-center gap-x-4">
+                  <Input className=" w-24 my-4 text-xl" ref={codeRef} value={secretCode} />
+                  <Button onClick={CopyURL}>
+                    {" "}
+                    <Copy />
+                  </Button>
+                  </div>
                 </div>
               )}
             </div>
           </>
         ) : (
-          <label className="flex flex-col items-center border border-gray-800 rounded-md  w-full p-5 mx-auto mt-2 text-center  cursor-pointer ">
+          <label className="flex flex-col items-center border dark:border-gray-800 border-gray-300 rounded-md  w-full p-5 mx-auto mt-2 text-center  cursor-pointer ">
             <Plus />
             <p className="mt-2 text-xs tracking-wide text-gray-500 ">
               Upload or drag & drop your file

@@ -69,7 +69,7 @@ export function RecieveFile() {
   };
 
   return (
-    <Card className="w-[350px] ">
+    <Card className="w-[350px]   shadow-lg">
       <CardHeader>
         <CardTitle>Recieve a File</CardTitle>
       </CardHeader>
@@ -92,7 +92,7 @@ export function RecieveFile() {
             placeholder="Enter code"
           />
 
-          <Button
+          <Button 
           disabled={!enteredCode}
             type="submit"
             onClick={handleSecretCodeSubmit}
