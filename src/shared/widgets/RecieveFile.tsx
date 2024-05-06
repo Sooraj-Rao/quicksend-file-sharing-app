@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import axios from "axios";
 import { Download } from "lucide-react";
@@ -15,32 +9,52 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 export function RecieveFile() {
-  const [enteredCode, setEnteredCode] = useState();
-  const [dowloadUrl, setdowloadUrl] = useState({});
+  const [enteredCode, setEnteredCode] = useState(null);
   const [loader, setloader] = useState(false);
   const { toast } = useToast();
 
   const handleDownloadFile = async ({ url, name }) => {
     try {
+      const blob = new Blob([url]);
+      const dataUrl = window.URL.createObjectURL(blob);
+
       const link = document.createElement("a");
-      link.href = url;
+      link.href = dataUrl;
       link.setAttribute("download", name || "new file");
       link.style.display = "none";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setEnteredCode(null);
     } catch (error) {
-      console.error("Error downloading file:", error);
+      toast({
+        variant: "destructive",
+        description: "Failed to download the file",
+      });
     }
   };
 
   const handleSecretCodeSubmit = async (e) => {
     e.preventDefault();
+
+    if (!enteredCode) return;
+    if (enteredCode.length != 6)
+      return toast({
+        variant: "destructive",
+        description: `Code should ${
+          enteredCode.length < 6 ? "be" : "not exceed"
+        }  6 digit`,
+      });
+
+    if (!/^[0-9]*$/.test(enteredCode!))
+      return toast({
+        variant: "destructive",
+        description: "Only numbers allowed",
+      });
+
     setloader(true);
     try {
       const res = await axios.post("/api/validate", { enteredCode });
-      console.log(res.data);
-
       const {
         error,
         file: { url, name },
@@ -54,14 +68,12 @@ export function RecieveFile() {
       }
 
       if (url) {
-        setdowloadUrl({ url, name });
         handleDownloadFile({ url, name });
       }
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
-        description: "Failed to validate the code",
+        description: "Failed to download the file",
       });
     } finally {
       setloader(false);
@@ -69,31 +81,21 @@ export function RecieveFile() {
   };
 
   return (
-    <Card className="w-[350px]   shadow-lg">
+    <Card className="w-[350px]   shadow-lg shadow-black dark:border-slate-500">
       <CardHeader>
         <CardTitle>Recieve a File</CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-center mt-5">
         <form className="flex w-full max-w-sm items-center space-x-2">
           <Input
-            onChange={(e) => {
-              const enteredValue = e.target.value;
-              if (/^[0-9]*$/.test(enteredValue)) {
-                setEnteredCode(enteredValue);
-              } else {
-                toast({
-                  variant: "destructive",
-                  description: "Only numbers allowed",
-                });
-              }
-            }}
-            value={enteredCode}
+            onChange={(e) => setEnteredCode(e.target.value)}
+            value={enteredCode == null ? "" : enteredCode}
             type="text"
-            placeholder="Enter code"
+            placeholder="Enter 6 digit code"
+            className=" border-slate-500 focus:border-transparent placeholder:font-normal tracking-wide placeholder:text-gray-500"
           />
 
-          <Button 
-          disabled={!enteredCode}
+          <Button
             type="submit"
             onClick={handleSecretCodeSubmit}
             className=" gap-x-2 flex items-center"

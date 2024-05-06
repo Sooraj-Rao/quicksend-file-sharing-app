@@ -13,13 +13,13 @@ const Hero = () => {
       <div className=" flex justify-center gap-x-5">
         {Operation === "none" ? (
           <>
-            <ShareFIle setOperation={setOperation} />
-            <RecieveFile setOperation={setOperation} />
+            <ShareFIle Operation={Operation} setOperation={setOperation} />
+            <RecieveFile />
           </>
         ) : Operation === "upload" ? (
-          <ShareFIle setOperation={setOperation} />
+          <ShareFIle Operation={Operation} setOperation={setOperation} />
         ) : (
-          <RecieveFile setOperation={setOperation} />
+          <RecieveFile />
         )}
       </div>
     </div>

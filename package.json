@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "filesize": "^10.1.1",
     "firebase": "^10.11.1",
+    "input-otp": "^1.2.4",
     "lucide-react": "^0.378.0",
     "mongoose": "^8.3.3",
     "next": "14.2.3",
