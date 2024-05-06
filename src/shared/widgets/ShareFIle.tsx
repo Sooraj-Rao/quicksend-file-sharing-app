@@ -1,8 +1,6 @@
-"use client";
-
+import React, { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
 import { filesize } from "filesize";
 import {
   getDownloadURL,
@@ -16,21 +14,25 @@ import { ArrowLeft, Copy, Trash, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 
-type T_selectedFile = {
+type T_selectedFile = Blob & {
   name: string;
   size: number;
+  type: string;
 };
 
-const ShareFIle = ({ setOperation, Operation }) => {
-  const [selectedFile, setSelectedFile] = useState<T_selectedFile>();
-  const [secretCode, setSecretCode] = useState("");
-  const [SplitCode, setSplitCode] = useState([]);
-  const [width, setWidth] = useState(0);
-  const [loader, setloader] = useState(false);
-  const storage = getStorage(app);
-  const { toast } = useToast();
+type ShareFileProps = {
+  setOperation: React.Dispatch<React.SetStateAction<string>>;
+  Operation: string;
+};
 
-  let progress: number;
+const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
+  const [selectedFile, setSelectedFile] = useState<T_selectedFile | null>(null);
+  const [secretCode, setSecretCode] = useState("");
+  const [SplitCode, setSplitCode] = useState<string[]>([]);
+  const [width, setWidth] = useState(0);
+  const [loader, setLoader] = useState(false);
+  const storage = getStorage(app);
+  const { toast }: any = useToast();
 
   const handleUploadFile = async (downloadURL: string) => {
     if (!selectedFile || !downloadURL)
@@ -54,8 +56,8 @@ const ShareFIle = ({ setOperation, Operation }) => {
     }
   };
 
-  const UploadFile = (file: any) => {
-    setloader(true);
+  const UploadFile = (file: T_selectedFile) => {
+    setLoader(true);
     try {
       const metadata = {
         contentType: file.type,
@@ -65,37 +67,20 @@ const ShareFIle = ({ setOperation, Operation }) => {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setWidth(progress == 0 ? 5 : progress);
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setWidth(progress === 0 ? 5 : progress);
         },
         (error) => {
-          switch (error.code) {
-            case "storage/unauthorized":
-              toast({
-                variant: "destructive",
-                description: "Upload failed",
-              });
-
-              break;
-            case "storage/canceled":
-              toast({
-                variant: "destructive",
-                description: "Upload failed",
-              });
-              break;
-
-            case "storage/unknown":
-              toast({
-                variant: "destructive",
-                description: "Upload failed",
-              });
-              break;
-          }
+          toast({
+            variant: "destructive",
+            description: "Upload failed",
+          });
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             handleUploadFile(downloadURL);
-            setloader(false);
+            setLoader(false);
           });
         }
       );
@@ -104,7 +89,7 @@ const ShareFIle = ({ setOperation, Operation }) => {
         variant: "destructive",
         description: "Upload failed",
       });
-      setloader(false);
+      setLoader(false);
     }
   };
 
@@ -135,7 +120,7 @@ const ShareFIle = ({ setOperation, Operation }) => {
                 <span
                   className={`${width == 0 ? "block" : "hidden"}`}
                   onClick={() => {
-                    setSelectedFile({ name: "", size: null });
+                    setSelectedFile(null);
                     setOperation("none");
                     setWidth(0);
                   }}
@@ -204,8 +189,10 @@ const ShareFIle = ({ setOperation, Operation }) => {
               Upload your file
             </p>
             <input
-              onChange={(e) => {
-                setSelectedFile(e.target?.files[0]);
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                const { files } = e.target;
+                if (!files) return;
+                setSelectedFile(files[0]!);
                 setOperation("upload");
               }}
               type="file"
@@ -220,7 +207,7 @@ const ShareFIle = ({ setOperation, Operation }) => {
         ${Operation === "none" ? "hidden" : "block"}
         `}
         onClick={() => {
-          setSelectedFile({ name: "", size: null });
+          setSelectedFile(null);
           setOperation("none");
           setSecretCode("");
           setWidth(0);
@@ -235,4 +222,4 @@ const ShareFIle = ({ setOperation, Operation }) => {
   );
 };
 
-export default ShareFIle;
+export default ShareFile;

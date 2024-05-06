@@ -1,10 +1,9 @@
-"use client";
 import React, { useState } from "react";
 import { RecieveFile } from "./RecieveFile";
 import ShareFIle from "./ShareFIle";
 
-const Hero = () => {
-  const [Operation, setOperation] = useState("none");
+const Hero: React.FC = () => {
+  const [Operation, setOperation] = useState<string>("none");
   return (
     <div>
       <h1 className="scroll-m-20 text-4xl font-bold text-center my-20  tracking-tight lg:text-5xl">

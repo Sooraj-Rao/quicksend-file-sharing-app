@@ -1,19 +1,24 @@
-"use client";
-
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import axios from "axios";
 import { Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SyntheticEvent } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
 export function RecieveFile() {
-  const [enteredCode, setEnteredCode] = useState(null);
-  const [loader, setloader] = useState(false);
-  const { toast } = useToast();
+  const [enteredCode, setEnteredCode] = useState<string>("");
+  const [loader, setLoader] = useState<boolean>(false);
+  const { toast }: any = useToast();
 
-  const handleDownloadFile = async ({ url, name }) => {
+  const handleDownloadFile = async ({
+    url,
+    name,
+  }: {
+    url: string;
+    name: string;
+  }) => {
     try {
       const blob = new Blob([url]);
       const dataUrl = window.URL.createObjectURL(blob);
@@ -25,7 +30,7 @@ export function RecieveFile() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      setEnteredCode(null);
+      setEnteredCode("");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -34,11 +39,11 @@ export function RecieveFile() {
     }
   };
 
-  const handleSecretCodeSubmit = async (e) => {
+  const handleSecretCodeSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     if (!enteredCode) return;
-    if (enteredCode.length != 6)
+    if (enteredCode.length !== 6)
       return toast({
         variant: "destructive",
         description: `Code should ${
@@ -46,13 +51,13 @@ export function RecieveFile() {
         }  6 digit`,
       });
 
-    if (!/^[0-9]*$/.test(enteredCode!))
+    if (!/^[0-9]*$/.test(enteredCode))
       return toast({
         variant: "destructive",
         description: "Only numbers allowed",
       });
 
-    setloader(true);
+    setLoader(true);
     try {
       const res = await axios.post("/api/validate", { enteredCode });
       const {
@@ -76,30 +81,29 @@ export function RecieveFile() {
         description: "Failed to download the file",
       });
     } finally {
-      setloader(false);
+      setLoader(false);
     }
   };
 
   return (
     <Card className="w-[350px]   shadow-lg shadow-black dark:border-slate-500">
       <CardHeader>
-        <CardTitle>Recieve a File</CardTitle>
+        <CardTitle>Receive a File</CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-center mt-5">
-        <form className="flex w-full max-w-sm items-center space-x-2">
+        <form
+          className="flex w-full max-w-sm items-center space-x-2"
+          onSubmit={handleSecretCodeSubmit}
+        >
           <Input
             onChange={(e) => setEnteredCode(e.target.value)}
-            value={enteredCode == null ? "" : enteredCode}
+            value={enteredCode}
             type="text"
             placeholder="Enter 6 digit code"
             className=" border-slate-500 focus:border-transparent placeholder:font-normal tracking-wide placeholder:text-gray-500"
           />
 
-          <Button
-            type="submit"
-            onClick={handleSecretCodeSubmit}
-            className=" gap-x-2 flex items-center"
-          >
+          <Button type="submit" className=" gap-x-2 flex items-center">
             {loader ? (
               <h1 className=" h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin"></h1>
             ) : (
