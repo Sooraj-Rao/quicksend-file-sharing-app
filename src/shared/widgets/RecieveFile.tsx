@@ -38,6 +38,7 @@ export function RecieveFile() {
     setLoader(true);
     try {
       const res = await FetchFile({ enteredCode });
+      setEnteredCode('');
       if (res?.error && res?.message) {
         toast({
           variant: "destructive",

@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const FetchFile = async ({ enteredCode }: { enteredCode: string }) => {
   try {
-    console.log(enteredCode);
     
     const res = await axios.post("/api/validate", { enteredCode });
     

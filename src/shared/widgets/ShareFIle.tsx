@@ -34,7 +34,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const [loader, setLoader] = useState(false);
   const storage = getStorage(app);
   const { toast }: any = useToast();
-  const URL = "http://localhost:3000/";
+  const URL = "https://srj-quicksend.vercel.app";
 
   const handleUploadFile = async (downloadURL: string) => {
     if (!selectedFile || !downloadURL)
@@ -159,7 +159,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                 ""
               )}
               {!secretCode ? (
-                width == 100 && !loader && <h1>Upload Succes</h1>
+                width == 100 && !loader && <h1>Upload Successful</h1>
               ) : (
                 <div className=" mt-6">
                   <h4 className=" text-sm">
