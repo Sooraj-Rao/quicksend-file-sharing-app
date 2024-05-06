@@ -15,12 +15,12 @@ const Header = () => {
       >
         <Image
           src={logoDark}
-          className=" h-8  w-[13rem] dark:hidden block"
+          className="h-7  w-[11rem] dark:hidden block"
           alt=""
         />
         <Image
           src={logo}
-          className=" h-8  w-[13rem] dark:block hidden "
+          className=" h-7  w-[11rem] dark:block hidden "
           alt=""
         />
       </Link>

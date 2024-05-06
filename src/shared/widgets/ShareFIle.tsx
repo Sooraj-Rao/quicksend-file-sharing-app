@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const [loader, setLoader] = useState(false);
   const storage = getStorage(app);
   const { toast }: any = useToast();
+  const URL = "http://localhost:3000/";
 
   const handleUploadFile = async (downloadURL: string) => {
     if (!selectedFile || !downloadURL)
@@ -93,12 +95,14 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
     }
   };
 
-  const CopyURL = async () => {
-    if (!secretCode) return;
+  const CopyURL = async (item: string) => {
+    if (!item) return;
     toast({
-      description: "Code Copied to the clipboard",
+      description: `${
+        item.length  ? "URL" : "Code"
+      } copied to the clipboard`,
     });
-    await window.navigator.clipboard.writeText(secretCode);
+    await window.navigator.clipboard.writeText(item);
   };
 
   return (
@@ -125,7 +129,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                     setWidth(0);
                   }}
                 >
-                  <Trash className="  hover:opacity-50 duration-300 text-slate-200 cursor-pointer" />
+                  <Trash className="  hover:opacity-50 duration-300 dark:text-slate-200 text-slate-900 cursor-pointer" />
                 </span>
               </div>
             </div>
@@ -141,9 +145,13 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
               )}
               {loader ? (
                 <div className=" w-full">
-                  <Progress value={width} className=" min-w-60" />
+                  <h4 className=" text-center"> {width.toFixed(0)}%</h4>
+                  <Progress
+                    value={width}
+                    className=" min-w-60 bg-slate-300 dark:bg-slate-700"
+                  />
                   <div className=" flex gap-x-2 my-3 items-center">
-                    <span>{width.toFixed(0)}%</span>
+                    Uploading
                     <h3 className=" h-4 w-4 border-2 border-black dark:border-white   dark:border-t-transparent border-t-transparent rounded-full animate-spin"></h3>
                   </div>
                 </div>
@@ -151,14 +159,14 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                 ""
               )}
               {!secretCode ? (
-                width == 100 && <h1>Upload Succes</h1>
+                width == 100 && !loader && <h1>Upload Succes</h1>
               ) : (
                 <div className=" mt-6">
                   <h4 className=" text-sm">
                     Share this Secret code for the file access{" "}
                   </h4>
                   <div className="  mt-4 w-full flex flex-col items-center">
-                    <div className=" flex">
+                    <div className=" flex gap-x-1">
                       {SplitCode.map((item, i) => {
                         return (
                           <h1
@@ -170,13 +178,22 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                         );
                       })}
                     </div>
-                    <Button
-                      onClick={CopyURL}
-                      className=" border-slate-400 flex items-center gap-x-1 mt-4   "
-                    >
-                      <span>Copy</span>
-                      <Copy className=" h-4 w-4 " />
-                    </Button>
+                    <div className=" flex gap-x-4">
+                      <Button
+                        onClick={() => CopyURL(secretCode)}
+                        className=" border-slate-400 flex items-center gap-x-1 mt-4   "
+                      >
+                        <span>Code</span>
+                        <Copy className=" h-4 w-4 " />
+                      </Button>
+                      <Button
+                        onClick={() => CopyURL(`${URL}/d/${secretCode}`)}
+                        className=" border-slate-400 flex items-center gap-x-1 mt-4   "
+                      >
+                        <span>URL</span>
+                        <Copy className=" h-4 w-4 " />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -210,13 +227,18 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
           setSelectedFile(null);
           setOperation("none");
           setSecretCode("");
+          setSplitCode([]);
           setWidth(0);
         }}
       >
-        <div className=" items-center flex w-fit   justify-start gap-x-1  cursor-pointer hover:duration-300 hover:opacity-80 ">
+        <Button
+          variant="link"
+          disabled={loader}
+          className=" items-center flex w-fit disabled:hidden    justify-start gap-x-1  cursor-pointer hover:duration-300 hover:opacity-80 "
+        >
           <ArrowLeft className=" h-4 w-4  " />
           Back
-        </div>
+        </Button>
       </CardFooter>
     </Card>
   );

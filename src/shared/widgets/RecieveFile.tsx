@@ -1,48 +1,26 @@
+"use client";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
-import axios from "axios";
 import { Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SyntheticEvent } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { FetchFile } from "@/actions/get.file";
 
 export function RecieveFile() {
   const [enteredCode, setEnteredCode] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
   const { toast }: any = useToast();
 
-  const handleDownloadFile = async ({
-    url,
-    name,
-  }: {
-    url: string;
-    name: string;
-  }) => {
-    try {
-      const blob = new Blob([url]);
-      const dataUrl = window.URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.setAttribute("download", name || "new file");
-      link.style.display = "none";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setEnteredCode("");
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "Failed to download the file",
-      });
-    }
-  };
-
   const handleSecretCodeSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (!enteredCode) return;
+    if (!enteredCode)
+      return toast({
+        variant: "destructive",
+        description: "Code cannot be empty",
+      });
     if (enteredCode.length !== 6)
       return toast({
         variant: "destructive",
@@ -59,21 +37,12 @@ export function RecieveFile() {
 
     setLoader(true);
     try {
-      const res = await axios.post("/api/validate", { enteredCode });
-      const {
-        error,
-        file: { url, name },
-        message,
-      } = res.data;
-      if (error) {
-        return toast({
+      const res = await FetchFile({ enteredCode });
+      if (res?.error && res?.message) {
+        toast({
           variant: "destructive",
-          description: message,
+          description: res?.message,
         });
-      }
-
-      if (url) {
-        handleDownloadFile({ url, name });
       }
     } catch (error) {
       toast({
@@ -105,7 +74,7 @@ export function RecieveFile() {
 
           <Button type="submit" className=" gap-x-2 flex items-center">
             {loader ? (
-              <h1 className=" h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin"></h1>
+              <h1 className=" h-4 w-4 border-2  dark:border-black border-t-transparent dark:border-t-transparent rounded-full animate-spin"></h1>
             ) : (
               <>
                 <span>Download</span>

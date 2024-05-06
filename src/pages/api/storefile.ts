@@ -10,7 +10,6 @@ export default async function handler(
 
   try {
     const { fileData, fileName } = req.body;
-    console.log(fileName);
     
     const secretCode = Math.floor(Math.random() * 1000000);
 
@@ -19,7 +18,6 @@ export default async function handler(
       file: fileData,
       code: secretCode,
     });
-    console.log(saveData);
     res.json({ code: saveData?.code, error: false });
   } catch (error) {
     res.json({ error: true, message: "Failed to upload file" });
