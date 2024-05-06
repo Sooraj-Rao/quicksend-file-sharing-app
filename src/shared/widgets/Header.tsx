@@ -26,7 +26,7 @@ const Header = () => {
       </Link>
       <div className="  flex gap-x-4 ">
         <ModeToggle />
-        <a href={"https://github.com/Sooraj-Rao"} target="_blank">
+        <a href={"https://github.com/Sooraj-Rao/Quicksend"} target="_blank">
           <Button
             variant="link"
             className=" py-2 px-4 border border-slate-400  dark:border-slate-800 rounded md:flex hidden items-center gap-x-1"

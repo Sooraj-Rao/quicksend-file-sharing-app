@@ -7,14 +7,14 @@ const Hero: React.FC = () => {
   return (
     <div>
       {Operation == "none" ? (
-        <h1 className="scroll-m-20 text-4xl font-bold text-center my-20  tracking-tight lg:text-5xl">
+        <h1 className="scroll-m-20 md:text-4xl mx-3 text-2xl font-bold text-center my-20  tracking-tight lg:text-5xl">
           QuickSend: Connect and share, without limits.
         </h1>
       ) : (
         ""
       )}
       <div
-        className={`flex justify-center gap-x-5
+        className={`flex md:flex-row flex-col items-center gap-y-5 md:gap-y-0 mb-10 md:mb-0  md:items-stretch justify-center gap-x-5
       ${Operation != "none" ? "mt-20" : "mt-0"}
       `}
       >

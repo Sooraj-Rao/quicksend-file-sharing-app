@@ -56,13 +56,13 @@ export function RecieveFile() {
   };
 
   return (
-    <Card className="w-[350px]   shadow-lg shadow-black dark:border-slate-500">
+    <Card className="md:w-[350px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
       <CardHeader>
         <CardTitle>Receive a File</CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-center mt-5">
         <form
-          className="flex w-full max-w-sm items-center space-x-2"
+          className="flex flex-col md:flex-row  gap-y-5 md:gap-y-0 w-full max-w-sm items-center space-x-2"
           onSubmit={handleSecretCodeSubmit}
         >
           <Input

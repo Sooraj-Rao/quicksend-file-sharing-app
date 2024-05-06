@@ -18,6 +18,7 @@ export const FetchFile = async ({ enteredCode }: { enteredCode: string }) => {
     }
   } catch (error) {
     console.log(error);
+    
     return { error: true, message: "Failed to get file" };
   }
 };

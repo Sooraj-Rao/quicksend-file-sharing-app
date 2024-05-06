@@ -106,9 +106,9 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   };
 
   return (
-    <Card className="w-[350px]  shadow-lg shadow-black dark:border-slate-500  ">
+    <Card className="md:w-[350px] w-[90%] sm:w-[60%]  shadow-lg shadow-black dark:border-slate-500  ">
       <CardHeader>
-        <CardTitle>Share {selectedFile ? "this" : "a"} File</CardTitle>
+        <CardTitle className=" text-sm md:text-xl">Share {selectedFile ? "this" : "a"} File</CardTitle>
       </CardHeader>
       <CardFooter className=" flex flex-col ">
         {selectedFile?.name ? (
@@ -116,7 +116,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
             <div className="  bg-slate-100 shadow shadow-slate-200 dark:shadow-none dark:bg-gray-900   w-full py-2 px-4 rounded ">
               <div className="flex justify-between items-center">
                 <div>
-                  <h1 className="font-bold">{selectedFile?.name}</h1>
+                  <h1 className="font-bold text-sm md:text-xl">{selectedFile?.name}</h1>
                   <span className=" text-sm ">
                     {filesize(selectedFile?.size, { standard: "jedec" })}
                   </span>
@@ -161,8 +161,8 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
               {!secretCode ? (
                 width == 100 && !loader && <h1>Upload Successful</h1>
               ) : (
-                <div className=" mt-6">
-                  <h4 className=" text-sm">
+                <div className=" mt-6 text-center">
+                  <h4 className=" text-xs md:text-sm">
                     Share this Secret code for the file access{" "}
                   </h4>
                   <div className="  mt-4 w-full flex flex-col items-center">
@@ -171,26 +171,26 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                         return (
                           <h1
                             key={i}
-                            className="  text-2xl border-slate-400 px-4 py-1 rounded border"
+                            className=" text-sm  md:text-2xl border-slate-400 md:px-4 px-2 py-1 rounded border"
                           >
                             {item}
                           </h1>
                         );
                       })}
                     </div>
-                    <div className=" flex gap-x-4">
+                    <div className=" flex gap-x-4 ">
                       <Button
                         onClick={() => CopyURL(secretCode)}
-                        className=" border-slate-400 flex items-center gap-x-1 mt-4   "
+                        className=" border-slate-400 flex items-center gap-x-1 mt-4     "
                       >
-                        <span>Code</span>
+                        <span className=" text-xs md:text-sm">Code</span>
                         <Copy className=" h-4 w-4 " />
                       </Button>
                       <Button
                         onClick={() => CopyURL(`${URL}/d/${secretCode}`)}
                         className=" border-slate-400 flex items-center gap-x-1 mt-4   "
                       >
-                        <span>URL</span>
+                        <span className=" text-xs md:text-sm">URL</span>
                         <Copy className=" h-4 w-4 " />
                       </Button>
                     </div>
