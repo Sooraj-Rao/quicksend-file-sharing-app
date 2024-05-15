@@ -45,6 +45,10 @@ export function RecieveFile() {
           description: res?.message,
         });
       }
+      toast({
+        variant: "success",
+        description: 'Downloading has started..',
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -54,6 +58,7 @@ export function RecieveFile() {
       setLoader(false);
     }
   };
+
 
   return (
     <Card className="md:w-[350px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
