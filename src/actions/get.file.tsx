@@ -2,9 +2,8 @@ import axios from "axios";
 
 export const FetchFile = async ({ enteredCode }: { enteredCode: string }) => {
   try {
-    
     const res = await axios.post("/api/validate", { enteredCode });
-    
+
     const { error, message } = res.data;
     if (error) {
       return { error: true, message };
@@ -18,7 +17,7 @@ export const FetchFile = async ({ enteredCode }: { enteredCode: string }) => {
     }
   } catch (error) {
     console.log(error);
-    
+
     return { error: true, message: "Failed to get file" };
   }
 };
@@ -31,11 +30,14 @@ const handleDownloadFile = async ({
   name: string;
 }) => {
   try {
-    const blob = new Blob([url]);
+    const response = await fetch(url);
+
+    const blob = await response.blob();
     const dataUrl = window.URL.createObjectURL(blob);
+
     const link = document.createElement("a");
     link.href = dataUrl;
-    link.setAttribute("download", name || "new file");
+    link.setAttribute("download", name || "new_file");
     link.style.display = "none";
     document.body.appendChild(link);
     link.click();

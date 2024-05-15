@@ -71,10 +71,12 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setWidth(progress === 0 ? 5 : progress);
+          setWidth(progress === 0 ? 1 : progress);
         },
         (error) => {
-          toast({
+          console.log(error);
+          setSelectedFile(null);
+          return toast({
             variant: "destructive",
             description: "Upload failed",
           });
@@ -98,9 +100,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const CopyURL = async (item: string) => {
     if (!item) return;
     toast({
-      description: `${
-        item.length  ? "URL" : "Code"
-      } copied to the clipboard`,
+      description: `${item.length ? "URL" : "Code"} copied to the clipboard`,
     });
     await window.navigator.clipboard.writeText(item);
   };
@@ -108,7 +108,9 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   return (
     <Card className="md:w-[350px] w-[90%] sm:w-[60%]  shadow-lg shadow-black dark:border-slate-500  ">
       <CardHeader>
-        <CardTitle className=" text-sm md:text-xl">Share {selectedFile ? "this" : "a"} File</CardTitle>
+        <CardTitle className=" text-sm md:text-xl">
+          Share {selectedFile ? "this" : "a"} File
+        </CardTitle>
       </CardHeader>
       <CardFooter className=" flex flex-col ">
         {selectedFile?.name ? (
@@ -116,7 +118,9 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
             <div className="  bg-slate-100 shadow shadow-slate-200 dark:shadow-none dark:bg-gray-900   w-full py-2 px-4 rounded ">
               <div className="flex justify-between items-center">
                 <div>
-                  <h1 className="font-bold text-sm md:text-xl">{selectedFile?.name}</h1>
+                  <h1 className="font-bold text-sm md:text-xl">
+                    {selectedFile?.name}
+                  </h1>
                   <span className=" text-sm ">
                     {filesize(selectedFile?.size, { standard: "jedec" })}
                   </span>

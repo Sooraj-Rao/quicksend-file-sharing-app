@@ -7,7 +7,7 @@ const Hero: React.FC = () => {
   return (
     <div>
       {Operation == "none" ? (
-        <h1 className="scroll-m-20 md:text-4xl mx-3 text-2xl font-bold text-center my-20  tracking-tight lg:text-5xl">
+        <h1 className="sm:scroll-m-20 md:text-4xl mx-3 text-2xl font-bold text-center sm:my-20 my-10  tracking-tight lg:text-5xl">
           QuickSend: Connect and share, without limits.
         </h1>
       ) : (

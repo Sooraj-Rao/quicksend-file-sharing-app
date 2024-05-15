@@ -58,7 +58,7 @@ export function RecieveFile() {
   return (
     <Card className="md:w-[350px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
       <CardHeader>
-        <CardTitle>Receive a File</CardTitle>
+        <CardTitle className=" text-sm md:text-xl">Receive a File</CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-center mt-5">
         <form

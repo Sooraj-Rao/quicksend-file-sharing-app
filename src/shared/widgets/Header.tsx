@@ -8,23 +8,23 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <div className=" flex justify-between items-center px-10 py-3  shadow-slate-200 dark:shadow-none border-b-2  poppins-medium ">
+    <div className=" flex justify-between px-4  items-center sm:px-10  py-3  shadow-slate-200 dark:shadow-none border-b-2  poppins-medium ">
       <Link
         href={"/"}
         className="scroll-m-20  flex items-center gap-x-3  w-full font-bold  pb-2 text-3xl  tracking-tight first:mt-0"
       >
         <Image
           src={logoDark}
-          className="h-7  w-[11rem] dark:hidden block"
+          className="sm:h-7 h-5  sm:w-[11rem] w-[9rem] dark:hidden block"
           alt=""
         />
         <Image
           src={logo}
-          className=" h-7  w-[11rem] dark:block hidden "
+          className=" sm:h-7 h-5  sm:w-[11rem] w-[9rem] dark:block hidden "
           alt=""
         />
       </Link>
-      <div className="  flex gap-x-4 ">
+      <div className="  flex sm:gap-x-4 ">
         <ModeToggle />
         <a href={"https://github.com/Sooraj-Rao/Quicksend"} target="_blank">
           <Button
