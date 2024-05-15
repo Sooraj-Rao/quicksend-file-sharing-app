@@ -35,7 +35,8 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const storage = getStorage(app);
   const { toast }: any = useToast();
 
-  const URL = document.URL;
+  const URL = 'https://srj-quicksend.vercel.app';
+  
 
   const handleUploadFile = async (downloadURL: string) => {
     if (!selectedFile || !downloadURL)
