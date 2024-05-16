@@ -10,8 +10,10 @@ export default async function handler(
 
   try {
     const { fileData, fileName } = req.body;
-    
-    const secretCode = Math.floor(Math.random() * 1000000);
+
+    const secretCode = Math.floor(Math.random() * 1000000)
+      .toString()
+      .padStart(6, "0");
 
     const saveData = await File.create({
       fileName,

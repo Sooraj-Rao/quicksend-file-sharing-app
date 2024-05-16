@@ -35,8 +35,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const storage = getStorage(app);
   const { toast }: any = useToast();
 
-  const URL = 'https://srj-quicksend.vercel.app';
-  
+  const URL = "https://srj-quicksend.vercel.app";
 
   const handleUploadFile = async (downloadURL: string) => {
     if (!selectedFile || !downloadURL)
@@ -108,7 +107,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   };
 
   return (
-    <Card className="md:w-[350px] w-[90%] sm:w-[60%]  shadow-lg shadow-black dark:border-slate-500  ">
+    <Card className="md:w-[400px] w-[90%] sm:w-[60%]  shadow-lg shadow-black dark:border-slate-500  ">
       <CardHeader>
         <CardTitle className=" text-sm md:text-xl">
           Share {selectedFile ? "this" : "a"} File
@@ -120,12 +119,14 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
             <div className="  bg-slate-100 shadow shadow-slate-200 dark:shadow-none dark:bg-gray-900   w-full py-2 px-4 rounded ">
               <div className="flex justify-between items-center">
                 <div>
-                  <h1 className="font-bold text-sm md:text-xl">
-                    {selectedFile?.name}
+                  <h1 className=" text-sm md:text-xl">
+                    {selectedFile?.name.length > 25
+                      ? selectedFile?.name.slice(0, 25) + "..."
+                      : selectedFile?.name}
                   </h1>
-                  <span className=" text-sm ">
+                  <h1 className=" text-sm dark:text-slate-300 text-slate-600  mt-4 ">
                     {filesize(selectedFile?.size, { standard: "jedec" })}
-                  </span>
+                  </h1>
                 </div>
                 <span
                   className={`${width == 0 ? "block" : "hidden"}`}
@@ -168,7 +169,9 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
                 width == 100 &&
                 !loader && (
                   <>
-                    <h1 className=" dark:text-green-500 font-semibold">Upload Success !</h1>
+                    <h1 className=" dark:text-green-500 font-semibold">
+                      Upload Success !
+                    </h1>
                     <div className=" flex items-center gap-x-4">
                       <h1 className=" text-sm mt-5 h-10">Generating Code...</h1>
                       <h1 className=" h-4 w-4 border dark:border-slate-200 border-slate-800 border-t-transparent dark:border-t-transparent  animate-spin rounded-full"></h1>

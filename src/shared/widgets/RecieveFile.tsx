@@ -61,7 +61,7 @@ export function RecieveFile() {
 
 
   return (
-    <Card className="md:w-[350px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
+    <Card className="md:w-[400px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
       <CardHeader>
         <CardTitle className=" text-sm md:text-xl">Receive a File</CardTitle>
       </CardHeader>
