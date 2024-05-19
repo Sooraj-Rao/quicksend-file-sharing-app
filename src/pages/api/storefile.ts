@@ -1,5 +1,6 @@
 import File from "@/models/file.model";
 import { ConnectDb } from "@/shared/libs/config/db";
+import { GenerateCode } from "@/shared/libs/generateCode";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -11,9 +12,7 @@ export default async function handler(
   try {
     const { fileData, fileName } = req.body;
 
-    const secretCode = Math.floor(Math.random() * 1000000)
-      .toString()
-      .padStart(6, "0");
+    const secretCode =GenerateCode();
 
     const saveData = await File.create({
       fileName,
@@ -22,6 +21,6 @@ export default async function handler(
     });
     res.json({ code: saveData?.code, error: false });
   } catch (error) {
-    res.json({ error: true, message: "Failed to upload file" });
+    res.json({ error: true, message: "Failed to generate code" });
   }
 }
