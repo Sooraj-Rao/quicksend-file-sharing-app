@@ -17,7 +17,8 @@ const DownloadPageCode = ({
   const FetchData = async () => {
     const res = await FetchFile({ enteredCode: code });
     setLoader(false);
-
+    console.log(res);
+    
     if (res?.error && res?.message) {
       return toast({
         variant: "destructive",

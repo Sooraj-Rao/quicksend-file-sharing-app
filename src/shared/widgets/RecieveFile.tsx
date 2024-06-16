@@ -38,16 +38,17 @@ export function RecieveFile() {
     setLoader(true);
     try {
       const res = await FetchFile({ enteredCode });
-      setEnteredCode('');
+
+      setEnteredCode("");
       if (res?.error && res?.message) {
-        toast({
+        return toast({
           variant: "destructive",
           description: res?.message,
         });
       }
       toast({
         variant: "success",
-        description: 'Downloading has started..',
+        description: "Downloading has started..",
       });
     } catch (error) {
       toast({
@@ -58,7 +59,6 @@ export function RecieveFile() {
       setLoader(false);
     }
   };
-
 
   return (
     <Card className="md:w-[400px] w-[90%]  sm:w-[60%]   shadow-lg shadow-black dark:border-slate-500">
