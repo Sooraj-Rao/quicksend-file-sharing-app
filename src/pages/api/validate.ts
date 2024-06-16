@@ -24,6 +24,6 @@ export default async function handler(
   } catch (error) {
     console.log(error);
 
-    res.json({ error: true, message: "Failed to validate code" });
+    res.json({ error: true, message: "Internal server error" });
   }
 }

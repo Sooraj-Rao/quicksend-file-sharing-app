@@ -75,7 +75,6 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
           setWidth(progress === 0 ? 1 : progress);
         },
         (error) => {
-          console.log(error);
           setSelectedFile(null);
           return toast({
             variant: "destructive",

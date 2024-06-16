@@ -21,6 +21,6 @@ export default async function handler(
     });
     res.json({ code: saveData?.code, error: false });
   } catch (error) {
-    res.json({ error: true, message: "Failed to generate code" });
+    res.json({ error: true, message: "Internal server error" });
   }
 }

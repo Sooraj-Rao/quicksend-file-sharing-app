@@ -14,11 +14,24 @@ const DownloadPageCode = ({
   const { toast }: any = useToast();
   const [loader, setLoader] = useState(true);
   const [success, setSuccess] = useState(false);
+
   const FetchData = async () => {
+    const enteredCode = code;
+    if (
+      !enteredCode ||
+      !/^[0-9]*$/.test(enteredCode) ||
+      enteredCode?.length !== 6
+    ) {
+      setLoader(false);
+      return toast({
+        variant: "destructive",
+        description: "Code or URL is Invalid",
+      });
+    }
+
     const res = await FetchFile({ enteredCode: code });
     setLoader(false);
-    console.log(res);
-    
+
     if (res?.error && res?.message) {
       return toast({
         variant: "destructive",
@@ -38,7 +51,7 @@ const DownloadPageCode = ({
 
   return (
     <div className=" flex text-xl flex-col items-center  mt-32 min-h-60 ">
-      {!success && <h1>Fetching File...</h1>}
+      {!success && loader && <h1>Fetching File...</h1>}
       <h1
         className={` h-6 w-6 rounded-full mt-5 border border-t-transparent dark:border-t-transparent animate-spin  dark:border-white border-black 
           ${loader ? "block" : "hidden"}
