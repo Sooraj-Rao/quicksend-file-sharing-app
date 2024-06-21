@@ -1,50 +1,62 @@
 "use client";
 
-import { FetchFile } from "@/actions/get.file";
+import { GetFile, Response } from "@/actions/getfile";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { handleDownloadFile } from "@/shared/widgets/DownloadFile";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const DownloadPageCode = ({
   params: { code },
 }: {
-  params: { code: string };
+  params: { code: number };
 }) => {
   const { toast }: any = useToast();
   const [loader, setLoader] = useState(true);
   const [success, setSuccess] = useState(false);
 
   const FetchData = async () => {
-    const enteredCode = code;
-    if (
-      !enteredCode ||
-      !/^[0-9]*$/.test(enteredCode) ||
-      enteredCode?.length !== 6
-    ) {
+    if (code === null)
+      return toast({
+        variant: "destructive",
+        description: "Code cannot be empty",
+      });
+    if (code.toString().length !== 6)
+      return toast({
+        variant: "destructive",
+        description: `Code should ${
+          code.toString().length < 6 ? "be" : "not exceed"
+        }  6 digits`,
+      });
+
+    setLoader(true);
+    try {
+      const res: Response = await GetFile({ code });
+      const { error, message, file } = res;
+      if (error)
+        return toast({
+          variant: "destructive",
+          description: message,
+        });
+      if (file) {
+        const { url, name } = file;
+        const { error, message } = await handleDownloadFile({ url, name });
+        toast({
+          variant: error ? "destructive" : "default",
+          description: message,
+        });
+        setSuccess(true);
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Failed to download the file",
+      });
+    } finally {
       setLoader(false);
-      return toast({
-        variant: "destructive",
-        description: "Code or URL is Invalid",
-      });
     }
-
-    const res = await FetchFile({ enteredCode: code });
-    setLoader(false);
-
-    if (res?.error && res?.message) {
-      return toast({
-        variant: "destructive",
-        description: res?.message,
-      });
-    }
-    toast({
-      variant: "success",
-      description: "Downloading has started..",
-    });
-    setSuccess(true);
   };
-
   useEffect(() => {
     FetchData();
   }, [code]);

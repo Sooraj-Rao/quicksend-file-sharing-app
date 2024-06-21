@@ -1,11 +1,14 @@
 import { ModeToggle } from "@/components/toggle-mode";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
 import logo from "../../../public/image/logo-white.png";
 import logoDark from "../../../public/image/logo-black.png";
 import Image from "next/image";
 import Link from "next/link";
+import { FaBug } from "react-icons/fa";
+import { AiOutlineBug } from "react-icons/ai";
+import { SomeData } from "@/data/someData";
 
+import { FaGithub } from "react-icons/fa";
 const Header = () => {
   return (
     <div className=" flex justify-between px-4  items-center sm:px-10  py-3  shadow-slate-200 dark:shadow-none border-b-2  poppins-medium ">
@@ -25,25 +28,24 @@ const Header = () => {
         />
       </Link>
       <div className="  flex sm:gap-x-4 ">
+        <a href={SomeData.contact} target="_blank">
+          <Button
+            variant="ghost"
+            className=" py-2 px-4 rounded md:flex hidden items-center gap-x-3"
+          >
+            <AiOutlineBug size={20} />
+            <span>Report an Issue</span>
+          </Button>
+        </a>
+        <a href={SomeData.github} target="_blank">
+          <Button
+            variant="ghost"
+            className=" py-2 px-4   rounded md:flex hidden items-center gap-x-1"
+          >
+            <FaGithub size={20} />
+          </Button>
+        </a>
         <ModeToggle />
-        <a href={"https://github.com/Sooraj-Rao/Quicksend"} target="_blank">
-          <Button
-            variant="link"
-            className=" py-2 px-4 border border-slate-400  dark:border-slate-800 rounded md:flex hidden items-center gap-x-1"
-          >
-            <Github />
-            <span>Github</span>
-          </Button>
-        </a>
-        <a href={"https://soorajrao.xyz"} target="_blank">
-          <Button
-            variant="link"
-            className=" py-2 px-4 border  border-slate-400 dark:border-slate-800 rounded md:flex hidden items-center gap-x-1"
-          >
-            <ExternalLink />
-            <span>Developer</span>
-          </Button>
-        </a>
       </div>
     </div>
   );

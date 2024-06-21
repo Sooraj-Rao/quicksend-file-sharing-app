@@ -10,10 +10,10 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "@/shared/libs/config/firebase";
-import axios from "axios";
 import { ArrowLeft, Copy, Trash, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
+import { StoreFile } from "@/actions/store.file";
 
 type T_selectedFile = Blob & {
   name: string;
@@ -28,7 +28,7 @@ type ShareFileProps = {
 
 const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
   const [selectedFile, setSelectedFile] = useState<T_selectedFile | null>(null);
-  const [secretCode, setSecretCode] = useState("");
+  const [secretCode, setSecretCode] = useState(0);
   const [SplitCode, setSplitCode] = useState<string[]>([]);
   const [width, setWidth] = useState(0);
   const [loader, setLoader] = useState(false);
@@ -48,9 +48,17 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
         fileData: downloadURL,
         fileName: selectedFile?.name,
       };
-      const res = await axios.post("/api/storefile", ReqData);
-      setSecretCode(res.data.code);
-      setSplitCode(res.data.code.toString().split(""));
+      const res = await StoreFile(ReqData);
+      const { error, message, code } = res;
+      if (error)
+        return toast({
+          variant: "destructive",
+          description: message,
+        });
+      else if (code) {
+        setSecretCode(code);
+        setSplitCode(code.toString().split(""));
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -97,12 +105,14 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
     }
   };
 
-  const CopyURL = async (item: string) => {
-    if (!item) return;
+  const CopyURL = async (item: number | string) => {
+    if (item === undefined || item === null) return;
+    const textToCopy = item.toString();
+    await window.navigator.clipboard.writeText(textToCopy);
+    const itemCopied = typeof item === "string" ? "URL" : "Code";
     toast({
-      description: `${item.length ? "URL" : "Code"} copied to the clipboard`,
+      description: `${itemCopied} Copied to the clipboard`,
     });
-    await window.navigator.clipboard.writeText(item);
   };
 
   return (
@@ -243,7 +253,7 @@ const ShareFile: React.FC<ShareFileProps> = ({ setOperation, Operation }) => {
         onClick={() => {
           setSelectedFile(null);
           setOperation("none");
-          setSecretCode("");
+          setSecretCode(0);
           setSplitCode([]);
           setWidth(0);
         }}
