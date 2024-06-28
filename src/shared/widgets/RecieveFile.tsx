@@ -5,60 +5,34 @@ import { Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { GetFile, Response } from "@/actions/getfile";
-import { handleDownloadFile } from "./DownloadFile";
+import useVerifyAndDownload from "@/hook/VerifyAndDownload";
 
 export function RecieveFile() {
   const [enteredCode, setEnteredCode] = useState<number | null>(null);
-  const [loader, setLoader] = useState<boolean>(false);
+  const { fetchData, loader, success } = useVerifyAndDownload({
+    code: enteredCode,
+  });
   const { toast } = useToast();
 
   const handleSecretCodeSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    if (enteredCode === null)
-      return toast({
-        variant: "destructive",
-        description: "Code cannot be empty",
-      });
-    if (enteredCode.toString().length !== 6)
-      return toast({
-        variant: "destructive",
-        description: `Code should ${
-          enteredCode.toString().length < 6 ? "be" : "not exceed"
-        }  6 digits`,
-      });
-
-    setLoader(true);
-    try {
-      const res: Response = await GetFile({ code: enteredCode });
-      const { error, message, file } = res;
-      if (error)
-        return toast({
-          variant: "destructive",
-          description: message,
-        });
-      if (file) {
-        setEnteredCode(null);
-        const { url, name } = file;
-        const { error, message } = await handleDownloadFile({ url, name });
-        toast({
-          variant: error ? "destructive" : "default",
-          description: message,
-        });
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "Failed to download the file",
-      });
-    } finally {
-      setLoader(false);
-    }
+    await fetchData();
   };
-
   const handleCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setEnteredCode(value ? parseInt(value, 10) : null);
+
+    if (!/^\d*$/.test(value)) {
+      toast({
+        variant: "destructive",
+        description: "Only numbers allowed",
+      });
+      return;
+    }
+    if (value.length > 6) {
+      return;
+    }
+    const enteredValue = value === "" ? null : parseInt(value, 10);
+    setEnteredCode(enteredValue);
   };
 
   return (

@@ -1,5 +1,6 @@
 "use server";
 import File from "@/models/file.model";
+import { ConnectDb } from "@/shared/libs/config/db";
 
 export type Response = {
   error: boolean;
@@ -13,6 +14,7 @@ export const GetFile = async ({
   code: number;
 }): Promise<Response> => {
   try {
+    await ConnectDb();
     const findFile = await File.findOne({ code });
     if (findFile) {
       return {
