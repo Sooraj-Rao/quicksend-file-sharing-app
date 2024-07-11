@@ -4,11 +4,10 @@ import logo from "../../../public/image/logo-white.png";
 import logoDark from "../../../public/image/logo-black.png";
 import Image from "next/image";
 import Link from "next/link";
-import { FaBug } from "react-icons/fa";
 import { AiOutlineBug } from "react-icons/ai";
+import { FaGithub } from "react-icons/fa";
 import { SomeData } from "@/data/someData";
 
-import { FaGithub } from "react-icons/fa";
 const Header = () => {
   return (
     <div className=" flex justify-between px-4  items-center sm:px-10  py-3  shadow-slate-200 dark:shadow-none border-b-2  poppins-medium ">
