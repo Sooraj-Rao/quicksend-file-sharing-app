@@ -36,14 +36,14 @@ const Header = () => {
             <span>Report an Issue</span>
           </Button>
         </a>
-        <a href={SomeData.github} target="_blank">
+        {/* <a href={SomeData.github} target="_blank">
           <Button
             variant="ghost"
             className=" py-2 px-4   rounded md:flex hidden items-center gap-x-1"
           >
             <FaGithub size={20} />
           </Button>
-        </a>
+        </a> */}
         <ModeToggle />
       </div>
     </div>
