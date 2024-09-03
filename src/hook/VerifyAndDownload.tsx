@@ -2,8 +2,8 @@
 import { useRef, useState } from "react";
 import { GetFile, Response } from "@/actions/getfile";
 import { useToast } from "@/components/ui/use-toast";
-import { handleDownloadFile } from "@/shared/widgets/DownloadFile";
 import { usePathname } from "next/navigation";
+import { handleDownloadFile } from "@/components/component";
 
 const useVerifyAndDownload = ({ code }: { code: number | null }) => {
   const [loader, setLoader] = useState(false);

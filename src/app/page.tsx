@@ -1,5 +1,4 @@
-
-import Hero from "@/shared/widgets/Hero";
+import { Hero } from "@/components/component";
 
 const Page = () => {
   return (

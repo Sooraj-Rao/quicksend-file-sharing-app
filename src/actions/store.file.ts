@@ -1,7 +1,7 @@
 "use server";
 import File from "@/models/file.model";
 import { ConnectDb } from "@/shared/libs/config/db";
-import { GenerateCode } from "@/shared/libs/generateCode";
+import { GenerateCode } from "@/shared/util/generateCode";
 
 export type Response = {
   error: boolean;
