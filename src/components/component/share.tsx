@@ -253,15 +253,20 @@ function FileDetails({
             </p>
           </div>
         </div>
-        {!isUploading && uploadProgress === 0 && (
-          <Button variant="ghost" size="icon" onClick={onReset}>
+        {!secretCode && (
+          <Button
+            disabled={isUploading}
+            variant="ghost"
+            size="icon"
+            onClick={onReset}
+          >
             <X className="w-4 h-4" />
           </Button>
         )}
       </div>
 
-      {!isUploading && uploadProgress === 0 && (
-        <Button onClick={onUpload} className="w-full">
+      {!secretCode && (
+        <Button onClick={onUpload} disabled={isUploading} className="w-full">
           <Upload className="w-4 h-4 mr-2" />
           Upload File
         </Button>
@@ -281,10 +286,10 @@ function FileDetails({
         </div>
       )}
       {secretCode ? (
-        <div className="space-y-4">
-          <div className="p-4 bg-green-100 dark:bg-green-950 rounded-lg">
+        <div className="space-y-4 ">
+          <div className="p-4  bg-green-100 dark:bg-green-950 rounded-lg">
             <p className="text-green-950 dark:text-green-200 font-medium">
-              File uploaded successfully!
+              Successfully uploaded the file
             </p>
           </div>
           <div className="space-y-2">

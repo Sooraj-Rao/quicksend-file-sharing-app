@@ -36,7 +36,7 @@ export const Header = () => {
         >
           <Button
             variant="ghost"
-            className="py-2 px-4 text-xs sm:text-sm rounded flex items-center gap-x-3 hover:bg-primary/10 transition-colors"
+            className="py-2 px-4 text-xs sm:text-sm rounded flex items-center gap-x-3 "
           >
             <span>Home</span>
           </Button>
@@ -50,7 +50,7 @@ export const Header = () => {
         >
           <Button
             variant="ghost"
-            className="py-2 px-4 text-xs sm:text-sm rounded flex items-center gap-x-3 hover:bg-primary/10 transition-colors"
+            className="py-2 px-4 text-xs sm:text-sm rounded flex items-center gap-x-3"
           >
             <span>About</span>
           </Button>
@@ -64,7 +64,7 @@ export const Header = () => {
         >
           <Button
             variant="ghost"
-            className="py-2 px-4 text-xs sm:text-sm rounded md:flex hidden items-center gap-x-2 hover:bg-primary/10 transition-colors"
+            className="py-2 px-4 text-xs sm:text-sm rounded md:flex hidden items-center gap-x-2 "
           >
             <span>Report an Issue</span>
             <AiOutlineBug size={16} />
