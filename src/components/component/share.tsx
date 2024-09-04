@@ -24,6 +24,8 @@ import {
 } from "firebase/storage";
 import { app } from "@/shared/libs/config/firebase";
 import { StoreFile } from "@/actions/store.file";
+import { useZustandStore } from "./zustand.store";
+import { fetchData } from "./fetch-data";
 
 type SelectedFile = Blob & {
   name: string;
@@ -45,11 +47,17 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
   const [secretCode, setSecretCode] = useState<number | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const { Ref } = useZustandStore();
+
+  const SendData = (data: string) => {
+    fetchData(data, Ref || "search", "quicksend_share_file", "none");
+  };
 
   const storage = getStorage(app);
   const { toast } = useToast();
 
   const handleUploadFile = async (downloadURL: string) => {
+    SendData("quicksend:upload-file");
     if (!selectedFile || !downloadURL) {
       toast({
         variant: "destructive",
@@ -79,6 +87,8 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
         variant: "destructive",
         description: "Upload failed",
       });
+    } finally {
+      setUploadProgress(0);
     }
   };
 
@@ -113,6 +123,7 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
   };
 
   const copyToClipboard = async (item: number | string) => {
+    SendData("quicksend:copy-URL");
     if (item == null) return;
     const textToCopy = item.toString();
     await navigator.clipboard.writeText(textToCopy);
@@ -215,13 +226,28 @@ function FileDetails({
   onCopy: (item: number | string) => void;
   onReset: () => void;
 }) {
+  const getDisplayName = (file: any) => {
+    const { name } = file;
+    if (name.length > 20) {
+      const baseName = name.slice(0, 16);
+      const extension = name.slice(-8);
+      return (
+        <div>
+          {baseName}..
+          <br className=" sm:hidden" />
+          {extension}
+        </div>
+      );
+    }
+    return name;
+  };
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between p-4  bg-accent rounded-lg">
         <div className="flex items-center space-x-3">
           <File className="w-8 h-8 text-foreground/50" />
           <div>
-            <p className="font-medium">{file.name}</p>
+            <p className="font-medium  break-words">{getDisplayName(file)}</p>
             <p className="text-sm text-gray-500">
               {filesize(file.size, { standard: "jedec" })}
             </p>
@@ -254,8 +280,7 @@ function FileDetails({
           </div>
         </div>
       )}
-
-      {secretCode && (
+      {secretCode ? (
         <div className="space-y-4">
           <div className="p-4 bg-green-100 dark:bg-green-950 rounded-lg">
             <p className="text-green-950 dark:text-green-200 font-medium">
@@ -283,6 +308,14 @@ function FileDetails({
             </div>
           </div>
         </div>
+      ) : (
+        uploadProgress === 100 &&
+        !isUploading && (
+          <h1 className=" flex items-center gap-x-2">
+            Generating code..
+            <Loader size={20} className=" animate-spin" />
+          </h1>
+        )
       )}
     </div>
   );

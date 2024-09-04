@@ -15,7 +15,7 @@ export const Hero: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8 md:py-16">
       {operation === "none" && (
-        <h1 className="text-xl md:text-4xl py-10 sm:py-6 lg:text-5xl font-extrabold text-center mb-8 md:mb-16">
+        <h1 className="text-2xl md:text-4xl  py-6 lg:text-5xl font-extrabold text-center mb-8 md:mb-16">
           QuickSend: Connect and share, without limits.
         </h1>
       )}
@@ -72,7 +72,7 @@ const OperationCard: React.FC<OperationCardProps> = ({
     >
       <CardContent className="flex flex-col items-center p-6 text-center">
         <div className="rounded-full bg-primary/10 p-3 mb-4">{icon}</div>
-        <h2 className="text-xl font-semibold mb-2">{title}</h2>
+        <h2 className="  md:text-xl font-semibold mb-2">{title}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
       </CardContent>
     </Card>

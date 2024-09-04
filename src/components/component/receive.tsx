@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 import { Download, Loader2 } from "lucide-react";
 import { handleDownloadFile } from "./download-file";
 import { GetFile } from "@/actions/getfile";
+import { fetchData } from "./fetch-data";
+import { useZustandStore } from "./zustand.store";
 
 const STATUS = {
   IDLE: "idle",
@@ -29,31 +30,25 @@ export function RecieveFile() {
   const [enteredCode, setEnteredCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [downloadStatus, setDownloadStatus] = useState<string>(STATUS.IDLE);
-  const { toast } = useToast();
-
-  const showToast = (
-    message: string,
-    variant: "default" | "destructive" = "default"
-  ) => {
-    toast({
-      description: message,
-      variant,
-    });
-  };
+  const { Ref } = useZustandStore();
 
   const handleError = (status: string, errorMessage: string) => {
     setDownloadStatus(status);
     setIsLoading(false);
-    // showToast(errorMessage, "destructive");
+  };
+
+  const SendData = (data: string) => {
+    fetchData(data, Ref || "search", "quicksend_recieve_file", "none");
   };
 
   const handleSecretCodeSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+
     if (enteredCode.length !== 6) {
       handleError(STATUS.INVALID, "Code should be exactly 6 digits");
       return;
     }
-
+    SendData("quicksend:recive-file-clicked");
     setIsLoading(true);
     setDownloadStatus(STATUS.VERIFYING);
 
@@ -83,7 +78,6 @@ export function RecieveFile() {
       }
 
       setDownloadStatus(STATUS.SUCCESS);
-      // showToast(downloadResult.message);
     } catch (error) {
       handleError(
         STATUS.ERROR,
@@ -115,7 +109,7 @@ export function RecieveFile() {
               value={enteredCode}
               type="text"
               placeholder="Enter 6-digit code"
-              className="text-center text-2xl tracking-widest"
+              className="text-center text-xl tracking-widest"
               maxLength={6}
               disabled={isLoading}
             />
@@ -144,10 +138,20 @@ export function RecieveFile() {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="text-center text-sm text-muted-foreground">
+      <CardFooter
+        className={`text-center text-sm text-muted-foreground
+      ${
+        (downloadStatus == STATUS.EXPIRED ||
+          downloadStatus == STATUS.ERROR ||
+          downloadStatus == STATUS.INVALID) &&
+        " text-red-400"
+      }
+      ${downloadStatus == STATUS.SUCCESS && " text-green-400"}
+      `}
+      >
         {
           {
-            [STATUS.IDLE]: "Enter the 6-digit code to download your file",
+            [STATUS.IDLE]: "Enter the 6-digit code to download file",
             [STATUS.SUCCESS]: "File downloaded successfully!",
             [STATUS.ERROR]: "An error occurred. Please try again.",
             [STATUS.INVALID]: "Code should be exactly 6 digits",
