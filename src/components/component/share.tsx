@@ -348,7 +348,7 @@ function FileDetails({
                   <Input id="share-url" value={ShortURL} readOnly />
                   <Button
                     className=" scale-90"
-                    onClick={() => onCopy(`${URL}/d/${secretCode}`)}
+                    onClick={() => onCopy(ShortURL)}
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy

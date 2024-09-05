@@ -23,7 +23,6 @@ const DownloadPageCode = ({
         {!success && loader && <h1>Fetching File...</h1>}
         {loader && <Loader className=" animate-spin" />}
       </div>
-
       <>
         <div className={`text-center block mb-10`}>
           <span className="text-sm sm:hidden">

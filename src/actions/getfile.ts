@@ -1,6 +1,5 @@
 "use server";
-import File from "@/models/file.model";
-import { ConnectDb } from "@/shared/libs/config/db";
+import { redis } from "@/shared/libs/config/redis";
 
 export type Response = {
   error: boolean;
@@ -15,14 +14,13 @@ export const GetFile = async ({
   code: number;
 }): Promise<Response> => {
   try {
-    await ConnectDb();
-    const findFile = await File.findOne({ code });
-    if (findFile) {
+    const res: any = await redis.get(String(code));
+    if (res) {
       return {
         message: "success",
         error: false,
         status: 200,
-        file: { url: findFile?.file, name: findFile?.fileName },
+        file: { url: res?.file, name: res?.fileName },
       };
     } else {
       return {
