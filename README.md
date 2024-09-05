@@ -2,35 +2,7 @@
 
 ### 🎉 Welcome! Need to share files in a flash? You're in the right place. Our website makes it easy, fast, and simple – no lengthy authentication or login required. Just upload and share. It's that easy! 💨
 
-## 🚀 Getting Started
-
-### **Clean and Simple Home Page**
-
-- QuickSend's home page is straightforward, making it easy for users to navigate and share files effortlessly.
-
-![QuickSend Preview](./public/readme/quicksend.png)
-
-### **Select File to Upload**
-
-- Choose the file you wish to upload with QuickSend's straightforward interface.
-
-![QuickSend Upload](./public/readme/upload.png)
-
-### **Upload File with realtime Progress**
-
-- QuickSend lets you upload files easily, showing real-time progress as they upload. Stay updated throughout the process for smooth sharing.
-
-![QuickSend Progress](./public/readme/progress.png)
-
-### **Complete Upload and Generate Code & URL**
-
-- After uploading, QuickSend generates a unique code and URL for your file. Copy and share them to allow others to access your uploaded content effortlessly
-
-![QuickSend Code](./public/readme/code.png)
-
-### **Download Access**
-
-- Use the provided code or URL to access and download your file effortlessly, ensuring convenient file retrieval for all users.
+Live -> [https://quicksend.soorajrao.in](https://quicksend.soorajrao.in/?ref=github_quicksend_readme)
 
 ## Features
 
@@ -70,7 +42,6 @@
 
 ## Connect With Me
 
-[![Twitter](https://img.shields.io/twitter/url?label=X&style=social&url=https%3A%2F%2Ftwitter.com)](https://twitter.com/Sooraj__Rao)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sooraj-%E2%80%8Erao-323b352a2/)
 
 ## Technologies Used

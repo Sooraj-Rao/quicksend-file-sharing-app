@@ -4,24 +4,26 @@ import { Suspense } from "react";
 
 const Page = () => {
   return (
-    <Suspense fallback={<h1>Loading...</h1>}>
-      <Analytics />
-      <Hero />
+    <div className="  flex flex-col min-h-screen">
+      <Suspense fallback={<h1>Loading...</h1>}>
+        <Analytics />
+        <Hero />
+      </Suspense>
       <Footer />
-    </Suspense>
+    </div>
   );
 };
 
 export default Page;
 
 const Footer = () => (
-  <p className="py-4 text-center text-xs sm:hidden">
+  <footer className="py-4 text-center text-xs mt-auto">
     Developed By{" "}
     <a
-      className=" text-muted-foreground font-semibold underline"
+      className="text-muted-foreground font-semibold underline"
       href={siteMetaData.portfolio}
     >
       Sooraj
-    </a>{" "}
-  </p>
+    </a>
+  </footer>
 );

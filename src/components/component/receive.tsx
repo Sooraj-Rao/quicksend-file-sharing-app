@@ -26,6 +26,14 @@ const STATUS = {
   EXPIRED: "expired",
 };
 
+const DisplayMessages = {
+  [STATUS.IDLE]: "Enter the 6-digit code to download file",
+  [STATUS.SUCCESS]: "File downloaded successfully!",
+  [STATUS.ERROR]: "An error occurred. Please try again.",
+  [STATUS.INVALID]: "Code should be exactly 6 digits",
+  [STATUS.EXPIRED]: "Code is invalid or expired",
+};
+
 export function RecieveFile() {
   const [enteredCode, setEnteredCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -99,7 +107,9 @@ export function RecieveFile() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Receive a File</CardTitle>
+        <CardTitle className="sm:text-2xl text-xl  font-bold">
+          Receive a File
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSecretCodeSubmit} className="space-y-4">
@@ -109,7 +119,7 @@ export function RecieveFile() {
               value={enteredCode}
               type="text"
               placeholder="Enter 6-digit code"
-              className="text-center text-xl tracking-widest"
+              className="text-center text-lg sm:text-xl tracking-widest"
               maxLength={6}
               disabled={isLoading}
             />
@@ -149,15 +159,7 @@ export function RecieveFile() {
       ${downloadStatus == STATUS.SUCCESS && " text-green-400"}
       `}
       >
-        {
-          {
-            [STATUS.IDLE]: "Enter the 6-digit code to download file",
-            [STATUS.SUCCESS]: "File downloaded successfully!",
-            [STATUS.ERROR]: "An error occurred. Please try again.",
-            [STATUS.INVALID]: "Code should be exactly 6 digits",
-            [STATUS.EXPIRED]: "Code is invalid or expired",
-          }[downloadStatus]
-        }
+        {DisplayMessages[downloadStatus]}
       </CardFooter>
     </Card>
   );

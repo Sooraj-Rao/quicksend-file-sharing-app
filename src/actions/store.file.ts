@@ -22,7 +22,6 @@ export const StoreFile = async ({
 
   try {
     const secretCode = GenerateCode();
-
     const saveData = await File.create({
       fileName,
       file: fileData,

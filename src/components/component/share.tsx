@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowLeft, Copy, File, Loader, Upload, X } from "lucide-react";
+import { ArrowLeft, Copy, File, Link, Loader, Upload, X } from "lucide-react";
 import { filesize } from "filesize";
 import {
   getDownloadURL,
@@ -26,6 +26,7 @@ import { app } from "@/shared/libs/config/firebase";
 import { StoreFile } from "@/actions/store.file";
 import { useZustandStore } from "./zustand.store";
 import { fetchData } from "./fetch-data";
+import { error } from "console";
 
 type SelectedFile = Blob & {
   name: string;
@@ -73,7 +74,6 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
       };
       const res = await StoreFile(reqData);
       const { error, message, code } = res;
-
       if (error) {
         toast({
           variant: "destructive",
@@ -85,7 +85,7 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
     } catch (error) {
       toast({
         variant: "destructive",
-        description: "Upload failed",
+        description: "Upload failed.Try after some time",
       });
     } finally {
       setUploadProgress(0);
@@ -143,7 +143,9 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Share a File</CardTitle>
+        <CardTitle className="sm:text-2xl text-xl font-bold">
+          Share a File
+        </CardTitle>
         <CardDescription>Upload and share your file securely</CardDescription>
       </CardHeader>
       <CardContent>
@@ -241,6 +243,38 @@ function FileDetails({
     }
     return name;
   };
+
+  const [loading, setLoading] = useState(false);
+  const [ShortURL, setShortURL] = useState("");
+
+  const ShortenUrl = async (url: string) => {
+    const apiKey = "quklnk_OQPmKajmPrjrsRGIuVzmVDtk";
+    setLoading(true);
+    fetch("https://sj1.xyz/api", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ long: url }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const {
+          data: { shortUrl },
+        } = result;
+        if (shortUrl) {
+          setShortURL(shortUrl);
+        } else {
+          setShortURL(url);
+        }
+      })
+      .catch(() => {
+        setShortURL(url);
+      })
+      .finally(() => setLoading(false));
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between p-4  bg-accent rounded-lg">
@@ -265,8 +299,12 @@ function FileDetails({
         )}
       </div>
 
-      {!secretCode && (
-        <Button onClick={onUpload} disabled={isUploading} className="w-full">
+      {!isUploading && !secretCode && uploadProgress == 0 && (
+        <Button
+          onClick={onUpload}
+          disabled={secretCode ? true : false}
+          className="w-full"
+        >
           <Upload className="w-4 h-4 mr-2" />
           Upload File
         </Button>
@@ -278,8 +316,8 @@ function FileDetails({
           <div className=" flex items-center justify-center gap-x-2 mt-2">
             <p className="text-sm text-center">
               {uploadProgress.toFixed(0) == "0"
-                ? "Uplaoding.."
-                : `${uploadProgress.toFixed(0)}% uploaded`}
+                ? "Uploading.."
+                : `${uploadProgress.toFixed(0)}% Uploaded`}
             </p>
             <Loader size={16} className=" animate-spin" />
           </div>
@@ -288,7 +326,7 @@ function FileDetails({
       {secretCode ? (
         <div className="space-y-4 ">
           <div className="p-4  bg-green-100 dark:bg-green-950 rounded-lg">
-            <p className="text-green-950 dark:text-green-200 font-medium">
+            <p className="text-green-950  text-sm sm:text-base dark:text-green-200 font-medium">
               Successfully uploaded the file
             </p>
           </div>
@@ -296,7 +334,7 @@ function FileDetails({
             <Label htmlFor="secret-code">Secret Code</Label>
             <div className="flex space-x-2">
               <Input id="secret-code" value={secretCode} readOnly />
-              <Button onClick={() => onCopy(secretCode)}>
+              <Button className=" scale-90" onClick={() => onCopy(secretCode)}>
                 <Copy className="w-4 h-4 mr-2" />
                 Copy
               </Button>
@@ -305,11 +343,34 @@ function FileDetails({
           <div className="space-y-2">
             <Label htmlFor="share-url">Share URL</Label>
             <div className="flex space-x-2">
-              <Input id="share-url" value={`${URL}/d/${secretCode}`} readOnly />
-              <Button onClick={() => onCopy(`${URL}/d/${secretCode}`)}>
-                <Copy className="w-4 h-4 mr-2" />
-                Copy
-              </Button>
+              {ShortURL ? (
+                <>
+                  <Input id="share-url" value={ShortURL} readOnly />
+                  <Button
+                    className=" scale-90"
+                    onClick={() => onCopy(`${URL}/d/${secretCode}`)}
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  disabled={loading}
+                  className=" flex gap-x-2 sm:scale-90"
+                  onClick={() => ShortenUrl(`${URL}/d/${secretCode}`)}
+                >
+                  {loading ? (
+                    <>
+                      Generating...
+                      <Loader size={14} className=" animate-spin" />
+                    </>
+                  ) : (
+                    "Generate URL"
+                  )}
+                  {!loading && <Link size={15} />}
+                </Button>
+              )}
             </div>
           </div>
         </div>
