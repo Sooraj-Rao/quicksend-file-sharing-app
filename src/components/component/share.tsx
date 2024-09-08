@@ -26,7 +26,6 @@ import { app } from "@/shared/libs/config/firebase";
 import { StoreFile } from "@/actions/store.file";
 import { useZustandStore } from "./zustand.store";
 import { fetchData } from "./fetch-data";
-import { error } from "console";
 
 type SelectedFile = Blob & {
   name: string;

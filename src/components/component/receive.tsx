@@ -26,6 +26,16 @@ const STATUS = {
   EXPIRED: "expired",
 };
 
+const ButtonMessage = {
+  [STATUS.IDLE]: "Download File",
+  [STATUS.VERIFYING]: "Verifying Code...",
+  [STATUS.DOWNLOADING]: "Downloading...",
+  [STATUS.SUCCESS]: "Download Complete",
+  [STATUS.ERROR]: "Try Again",
+  [STATUS.INVALID]: "Try Again",
+  [STATUS.EXPIRED]: "Try Again",
+};
+
 const DisplayMessages = {
   [STATUS.IDLE]: "Enter the 6-digit code to download file",
   [STATUS.SUCCESS]: "File downloaded successfully!",
@@ -61,7 +71,7 @@ export function RecieveFile() {
     setDownloadStatus(STATUS.VERIFYING);
 
     try {
-      const { error, message, file, status } = await GetFile({
+      const { file, status } = await GetFile({
         code: Number(enteredCode),
       });
 
@@ -134,17 +144,7 @@ export function RecieveFile() {
             ) : (
               <Download className="mr-2 h-4 w-4" />
             )}
-            {
-              {
-                [STATUS.IDLE]: "Download File",
-                [STATUS.VERIFYING]: "Verifying Code...",
-                [STATUS.DOWNLOADING]: "Downloading...",
-                [STATUS.SUCCESS]: "Download Complete",
-                [STATUS.ERROR]: "Try Again",
-                [STATUS.INVALID]: "Try Again",
-                [STATUS.EXPIRED]: "Try Again",
-              }[downloadStatus]
-            }
+            {ButtonMessage[downloadStatus]}
           </Button>
         </form>
       </CardContent>
