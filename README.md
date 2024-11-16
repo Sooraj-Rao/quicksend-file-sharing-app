@@ -1,3 +1,4 @@
+![](https://viewcount.soorajrao.in/api/sooraj-quicksend-repo?text=Repo-Views)
 
 
 ### 🎉 Welcome! Need to share files in a flash? You're in the right place. Our website makes it easy, fast, and simple – no lengthy authentication or login required. Just upload and share. It's that easy! 💨
