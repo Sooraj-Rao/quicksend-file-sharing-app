@@ -333,13 +333,8 @@ function FileDetails({
       )}
       {secretCode ? (
         <div className="space-y-4 ">
-          <div className="p-4  bg-green-100 dark:bg-green-950 rounded-lg">
-            <p className="text-green-950  text-sm sm:text-base dark:text-green-200 font-medium">
-              Successfully uploaded the file
-            </p>
-          </div>
           <div className="space-y-2">
-            <Label htmlFor="secret-code">Secret Code</Label>
+            <Label htmlFor="secret-code">Share Code</Label>
             <div className="flex space-x-2">
               <Input id="secret-code" value={secretCode} readOnly />
               <Button className=" scale-90" onClick={() => onCopy(secretCode)}>
