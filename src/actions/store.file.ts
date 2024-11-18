@@ -1,5 +1,7 @@
 "use server";
-import { redis } from "@/shared/libs/config/redis";
+
+import File from "@/model/file.model";
+import { ConnectDb } from "@/shared/libs/config/mongo";
 import { GenerateCode } from "@/shared/util/generateCode";
 
 export type Response = {
@@ -18,17 +20,15 @@ export const StoreFile = async ({
   fileName,
 }: Params): Promise<Response> => {
   try {
-    // await redis.setex(short, 86400, JSON.stringify(long));
+    await ConnectDb();
     const secretCode = GenerateCode();
 
-    const res = await redis.set(
-      JSON.stringify(secretCode),
-      JSON.stringify({ file: fileData, fileName })
-    );
-    if (res == "OK")
-      return { code: secretCode, error: false, message: "success" };
-
-    return { error: true, message: "Internal server error" };
+    const saveData = await File.create({
+      fileName,
+      file: fileData,
+      code: secretCode,
+    });
+    return { code: saveData?.code, error: false, message: "success" };
   } catch (error) {
     return { error: true, message: "Internal server error" };
   }

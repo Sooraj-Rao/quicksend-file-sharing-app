@@ -14,7 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { ArrowLeft, Copy, File, Link, Loader, Upload, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Copy,
+  File,
+  Link,
+  Loader,
+  Loader2,
+  Upload,
+  X,
+} from "lucide-react";
 import { filesize } from "filesize";
 import {
   getDownloadURL,
@@ -318,7 +327,7 @@ function FileDetails({
                 ? "Uploading.."
                 : `${uploadProgress.toFixed(0)}% Uploaded`}
             </p>
-            <Loader size={16} className=" animate-spin" />
+            <Loader2 size={16} className=" animate-spin" />
           </div>
         </div>
       )}
@@ -362,7 +371,7 @@ function FileDetails({
                   {loading ? (
                     <>
                       Generating...
-                      <Loader size={14} className=" animate-spin" />
+                      <Loader2 size={14} className=" animate-spin" />
                     </>
                   ) : (
                     "Generate URL"
@@ -378,7 +387,7 @@ function FileDetails({
         !isUploading && (
           <h1 className=" flex items-center gap-x-2">
             Generating code..
-            <Loader size={20} className=" animate-spin" />
+            <Loader2 size={20} className=" animate-spin" />
           </h1>
         )
       )}
