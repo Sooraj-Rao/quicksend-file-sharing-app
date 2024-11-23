@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Upload, Download } from "lucide-react";
 import ShareFile from "./share";
+import { Footer } from "./footer";
 
 export const Hero: React.FC = () => {
   const [operation, setOperation] = useState<"none" | "upload" | "receive">(
@@ -13,11 +14,7 @@ export const Hero: React.FC = () => {
   );
 
   return (
-    <div
-      className="container mx-auto px-4 py-8 md:py-16
-    
-    "
-    >
+    <div className="container   mx-auto px-4 py-8 md:py-16">
       {operation === "none" && (
         <h1 className="text-2xl md:text-4xl  py-6 lg:text-5xl font-extrabold text-center mb-8 md:mb-16">
           QuickSend: Connect and share, without limits.
@@ -52,6 +49,7 @@ export const Hero: React.FC = () => {
           </Button>
         </div>
       )}
+      <Footer />
     </div>
   );
 };
@@ -71,7 +69,7 @@ const OperationCard: React.FC<OperationCardProps> = ({
 }) => {
   return (
     <Card
-      className="w-full max-w-sm  hover:bg-accent/40 cursor-pointer transition-all hover:shadow-lg"
+      className="w-full max-w-sm  hover:bg-accent/70 bg-accent/30 cursor-pointer transition-all hover:shadow-lg"
       onClick={onClick}
     >
       <CardContent className="flex flex-col items-center p-6 text-center">

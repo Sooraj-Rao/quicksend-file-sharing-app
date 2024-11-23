@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { AiOutlineBug } from "react-icons/ai";
-// import icon from "../../../public/icon2.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoIosSend } from "react-icons/io";
@@ -19,7 +18,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="flex justify-between sticky top-0 bg-background/70 backdrop-blur shadow-md shadow-foreground/5 items-center px-4 sm:px-10 sm:py-4 py-2 dark:border-b border-b-foreground/20 sm:mt-0 dark:shadow-none z-50">
+    <header className="flex justify-between sticky top-0  backdrop-blur  shadow-sm items-center px-4 sm:px-10 sm:py-4 py-2 dark:border-b border-b-foreground/20 sm:mt-0 dark:shadow-none z-50">
       <Link
         href="/"
         className="flex items-center gap-2 font-extrabold tracking-tight first:mt-0 hover:opacity-80 transition-opacity"

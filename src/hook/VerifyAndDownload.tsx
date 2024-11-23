@@ -29,7 +29,12 @@ const useVerifyAndDownload = ({ code }: { code: number | null }) => {
           code.toString().length < 6 ? "be" : "not exceed"
         } 6 digits`,
       });
-
+    if (isNaN(Number(code))) {
+      return toast({
+        variant: "destructive",
+        description: "Code can only be numbers",
+      });
+    }
     setLoader(true);
     try {
       const res: Response = await GetFile({ code });

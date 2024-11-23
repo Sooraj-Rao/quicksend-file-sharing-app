@@ -12,13 +12,12 @@ const DownloadPageCode = ({
   params: { code: number };
 }) => {
   const { loader, success, fetchData } = useVerifyAndDownload({ code });
-
   useEffect(() => {
     fetchData();
   }, [code]);
 
   return (
-    <div className="flex text-xl flex-col items-center mt-32 min-h-60">
+    <div className="flex text-xl flex-col  items-center justify-center h-screen">
       <div className=" flex gap-x-2">
         {!success && loader && <h1>Fetching File...</h1>}
         {loader && <Loader className=" animate-spin" />}

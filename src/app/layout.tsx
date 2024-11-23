@@ -50,7 +50,7 @@ export default function RootLayout({
       <body
         className={`
         bg-gradient-to-tr from-white via-primary/20  to-white
-        dark:from-background  dark:via-primary/20 dark:to-background
+        dark:from-background  dark:via-primary/10 dark:to-background
       ${inter.className}`}
       >
         <Toaster />
