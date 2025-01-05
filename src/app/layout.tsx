@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     siteName: "QuickSend",
     images: [
       {
-        url: "/client/public/icon.png",
+        url: "https://quicksend.soorajrao.in/home.webp",
         width: 800,
         height: 600,
         alt: "QuickSend",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     title: "QuickSend - Upload and Share Files Easily",
     description:
       "QuickSend enables easy and secure file sharing with lightning-fast uploads and cross-platform compatibility.",
-    images: ["/client/public/icon.png"],
+    images: ["https://quicksend.soorajrao.in/home.webp"],
   },
   metadataBase: new URL("https://quicksend.soorajrao.in"),
 };
@@ -49,8 +49,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`
-        bg-gradient-to-tr from-white via-primary/20  to-white
-        dark:from-background  dark:via-primary/10 dark:to-background
+        bg-gradient-to-tr from-primary/5 via-primary/40  to-primary/5
+        dark:from-black  dark:via-primary/5 dark:to-black
       ${inter.className}`}
       >
         <Toaster />
