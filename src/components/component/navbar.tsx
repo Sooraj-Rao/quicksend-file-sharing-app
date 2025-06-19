@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { AiOutlineBug } from "react-icons/ai";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { IoIosSend } from "react-icons/io";
@@ -66,7 +65,6 @@ export const Header = () => {
             className="py-2 px-4 text-xs sm:text-sm rounded md:flex hidden items-center gap-x-2 "
           >
             <span>Report an Issue</span>
-            <AiOutlineBug size={16} />
           </Button>
         </a>
 

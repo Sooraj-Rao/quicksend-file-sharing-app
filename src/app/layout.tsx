@@ -49,7 +49,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`
-        bg-gradient-to-tr from-primary/5 via-primary/40  to-primary/5
+        bg-gradient-to-tr from-primary/5 via-primary/20  to-primary/5
         dark:from-black  dark:via-primary/5 dark:to-black
       ${inter.className}`}
       >

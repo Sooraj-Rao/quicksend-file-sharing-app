@@ -1,5 +1,5 @@
 "use client";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { IoMdMail } from "react-icons/io";
@@ -7,6 +7,7 @@ import { IoMdChatboxes } from "react-icons/io";
 import { PiCursorClickFill } from "react-icons/pi";
 import { siteMetaData } from "@/data/siteMetaData";
 import { fetchData, useZustandStore } from "@/components/component";
+import { MessageCircle } from "lucide-react";
 
 function AboutPage() {
   const { Ref } = useZustandStore();
@@ -16,92 +17,53 @@ function AboutPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 text-sm sm:text-base">
-      <div className="mb-4 border-transparent">
+    <div className="max-w-3xl mx-auto p-4 h-[calc(100vh-80px)]  ">
+      <Card className="mb-2 border-none shadow-none bg-transparent">
         <CardHeader>
-          <CardTitle className=" text-lg">About Us</CardTitle>
+          <CardTitle className=" text-base ">About QuickLink</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="mb-4 text-xs sm:text-base">
-            QuickSend is a seamless and secure file-sharing app that lets you
-            transfer files of any size quickly and easily. With advanced
-            encryption, cross-platform compatibility, and lightning-fast
-            uploads, QuickSend is designed to make file sharing simple and
-            efficient.
+        <CardContent className="  text-muted-foreground">
+          <p className=" mb-2">
+            QuickSend is a lightweight file-sharing app that lets you send and
+            receive files easily—no sign-ups or accounts required. Just upload a
+            file, get a shareable link, and you&apos;re good to go. Anyone with the
+            link can download the file, making the process quick and
+            straightforward.
           </p>
-          <p className="text-xs sm:text-base">
-            Whether {"you're"} a professional needing to send large files to
-            clients or a casual user sharing photos and documents, QuickSend
-            offers a reliable solution that fits your needs.
+          <p className="">
+            Ideal for both casual sharing and quick team collaboration,
+            QuickSend keeps things simple so you can focus on getting files
+            where they need to go.
           </p>
         </CardContent>
-      </div>
-      <hr className="dark:border-foreground/20" />
-      <div className="mb-4">
-        <CardHeader className=" pt-4 pb-2">
-          <CardTitle className="text-base">Contact Us</CardTitle>
+      </Card>
+      <hr className=" dark:border-foreground/20" />
+      <Card className="mb-2 border-none shadow-none bg-transparent">
+        <CardHeader>
+          <CardTitle className=" text-base ">Features</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="mb-4 text-xs sm:text-base">
-            Have any questions, feedback, or issues? {"We're"} here to assist
-            you!
-          </p>
-          <div className="mt-6 flex space-x-4">
-            <Button asChild variant="outline" className="flex gap-x-3">
-              <a
-                onClick={() => SendData("open-contact-us")}
-                href={siteMetaData.contact + "quicksend_about"}
-                target="_blank"
-              >
-                <IoMdChatboxes className="h-5 w-5" />
-                Contact Us
-              </a>
-            </Button>
-          </div>
+        <CardContent className="  text-muted-foreground">
+          <ul className="list-disc ml-5">
+            <li>No login or authentication required</li>
+            <li>Download files directly via shareable link</li>
+            <li>Works across devices and platforms</li>
+            <li>Clean, easy-to-use interface</li>
+          </ul>
         </CardContent>
-      </div>
-      <hr className="dark:border-foreground/20" />
-      <div className="mb-4">
-        <CardHeader className=" pt-4 pb-2">
-          <CardTitle className="text-base">Socials</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="mb-4 text-xs sm:text-base">
-            Connect with us on social media!
-          </p>
-          <div className="mt-6 flex space-x-4">
-            <Button title="mail" asChild variant="outline" size="icon">
-              <a
-                onClick={() => SendData("open-mail")}
-                href={siteMetaData.mail}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <IoMdMail className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button title="linkedin" asChild variant="outline" size="icon">
-              <a
-                onClick={() => SendData("open-linkedin")}
-                href={siteMetaData.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <LinkedInLogoIcon className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button title="portfolio" asChild variant="outline" size="icon">
-              <a
-                onClick={() => SendData("open-portfolio")}
-                href={siteMetaData.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <PiCursorClickFill className="rotate-90 h-5 w-5" />
-              </a>
-            </Button>
-          </div>
-        </CardContent>
+      </Card>
+
+      <hr className=" dark:border-foreground/20" />
+      <div className=" m-3  mt-6 flex gap-x-5  items-center">
+        <span className="sm:text-sm text-xs">Get in touch</span>
+        <a target="_blank" href={siteMetaData.contact}>
+          <Button
+            onClick={() => SendData("click_contact_about")}
+            className="sm:text-sm text-xs flex gap-2 items-center"
+          >
+            <MessageCircle size={15} />
+            Contact
+          </Button>
+        </a>
       </div>
     </div>
   );

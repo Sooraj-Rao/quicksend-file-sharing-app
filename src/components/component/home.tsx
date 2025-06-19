@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
     <div className="container   mx-auto px-4 py-8 md:py-16">
       {operation === "none" && (
         <h1 className="text-2xl md:text-4xl  py-6 lg:text-5xl font-extrabold text-center mb-8 md:mb-16">
-          QuickSend: Connect and share, without limits.
+          Send Your Files without Hassle
         </h1>
       )}
       <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
@@ -25,13 +25,13 @@ export const Hero: React.FC = () => {
           <>
             <OperationCard
               title="Share a File"
-              description="Upload and share your files securely"
+              description="Upload and share your files"
               icon={<Upload className="w-6 h-6" />}
               onClick={() => setOperation("upload")}
             />
             <OperationCard
               title="Receive a File"
-              description="Download shared files using a secret code"
+              description="Download shared files using a code"
               icon={<Download className="w-6 h-6" />}
               onClick={() => setOperation("receive")}
             />
