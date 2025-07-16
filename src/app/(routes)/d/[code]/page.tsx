@@ -11,13 +11,13 @@ const DownloadPageCode = ({
 }: {
   params: { code: number };
 }) => {
-  const { loader, success, fetchData } = useVerifyAndDownload({ code });
+  const { loader, success, fetchData, Error } = useVerifyAndDownload({ code });
   useEffect(() => {
     fetchData();
   }, [code]);
 
   return (
-    <div className="flex text-xl flex-col  items-center justify-center h-screen">
+    <div className="flex text-xl flex-col  items-center justify-center  mt-32">
       <div className=" flex gap-x-2">
         {!success && loader && <h1>Fetching File...</h1>}
         {loader && <Loader className=" animate-spin" />}
@@ -27,6 +27,10 @@ const DownloadPageCode = ({
           <span className="text-sm sm:hidden">
             {success && "Check notification for downloading details!"}
           </span>
+          <p className="text-xl sm:block hidden">
+            {success && "File download was successful!"}
+          </p>
+          {Error && <p className=" text-red-500 sm:text-xl sm:block hidden">{Error}</p>}
         </div>
         <Link href={"/"}>
           <Button>Go Home</Button>

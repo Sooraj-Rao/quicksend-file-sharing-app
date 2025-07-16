@@ -25,7 +25,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className=" mt-40 sm:flex-row flex-col   sm:gap-0 gap-4 flex items-center justify-around">
+    <footer className="  fixed bottom-0 left-0 py-4  w-full sm:flex-row flex-col   sm:gap-0 gap-4 flex items-center justify-around">
       <div className="bg-background cursor-default border hover:bg-accent/20 border-primary/10 rounded-md px-4 py-2 flex items-center space-x-3">
         <span className=" h-2 w-2 animate-pulse bg-primary rounded-full"></span>
         <div className="flex  items-center gap-x-3 dark:text-purple-300 text-purple-900 ">

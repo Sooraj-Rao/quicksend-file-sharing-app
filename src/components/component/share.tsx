@@ -236,6 +236,7 @@ function FileDetails({
   onCopy: (item: number | string) => void;
   onReset: () => void;
 }) {
+  const shareUrl = `https://quicksend.soorajrao.in/d/${secretCode}`;
   const getDisplayName = (file: any) => {
     const { name } = file;
     if (name.length > 20) {
@@ -252,40 +253,9 @@ function FileDetails({
     return name;
   };
 
-  const [loading, setLoading] = useState(false);
-  const [ShortURL, setShortURL] = useState("");
-
-  const ShortenUrl = async (url: string) => {
-    const apiKey = "quklnk_OQPmKajmPrjrsRGIuVzmVDtk";
-    setLoading(true);
-    fetch("https://srao.site/api", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ long: url }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        const {
-          data: { shortUrl },
-        } = result;
-        if (shortUrl) {
-          setShortURL(shortUrl);
-        } else {
-          setShortURL(url);
-        }
-      })
-      .catch(() => {
-        setShortURL(url);
-      })
-      .finally(() => setLoading(false));
-  };
-
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between p-4  bg-accent rounded-lg">
+      <div className="flex items-center justify-between p-4  bg-accent/40 rounded-lg">
         <div className="flex items-center space-x-3">
           <File className="w-8 h-8 text-foreground/50" />
           <div>
@@ -336,8 +306,13 @@ function FileDetails({
           <div className="space-y-2">
             <Label htmlFor="secret-code">Share Code</Label>
             <div className="flex space-x-2">
-              <Input id="secret-code" value={secretCode} readOnly />
-              <Button className=" scale-90" onClick={() => onCopy(secretCode)}>
+              <Input
+                id="secret-code"
+                className=" text-2xl border-none "
+                value={secretCode}
+                readOnly
+              />
+              <Button size="sm" onClick={() => onCopy(secretCode)}>
                 <Copy className="w-4 h-4 mr-2" />
                 Copy
               </Button>
@@ -346,35 +321,15 @@ function FileDetails({
           <div className="space-y-2">
             <Label htmlFor="share-url">Share URL</Label>
             <div className="flex space-x-2">
-              {ShortURL ? (
-                <>
-                  <Input id="share-url" value={ShortURL} readOnly />
-                  <Button
-                    className=" scale-90"
-                    onClick={() => onCopy(ShortURL)}
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  disabled={loading}
-                  className=" flex gap-x-2 sm:scale-90"
-                  onClick={() => ShortenUrl(`${URL}/d/${secretCode}`)}
-                >
-                  {loading ? (
-                    <>
-                      Generating...
-                      <Loader2 size={14} className=" animate-spin" />
-                    </>
-                  ) : (
-                    "Generate URL"
-                  )}
-                  {!loading && <Link size={15} />}
-                </Button>
-              )}
+              <Input id="share-url" value={shareUrl} readOnly />
+              <Button size="sm" onClick={() => onCopy(shareUrl)}>
+                <Copy className="w-4 h-4 mr-2" />
+                Copy
+              </Button>
             </div>
+            <p className=" text-xs mx-2  text-muted-foreground">
+              Clicking the link will download the file automatically
+            </p>
           </div>
         </div>
       ) : (

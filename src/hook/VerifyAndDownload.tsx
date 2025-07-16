@@ -11,59 +11,53 @@ const useVerifyAndDownload = ({ code }: { code: number | null }) => {
   const [success, setSuccess] = useState(false);
   const hasFetchedData = useRef(false);
   const path = usePathname();
+  const [Error, setError] = useState("");
 
   const fetchData = async () => {
     if (hasFetchedData.current) return;
     path.includes("/d/")
       ? (hasFetchedData.current = true)
       : (hasFetchedData.current = false);
-    if (code === null)
-      return toast({
-        variant: "destructive",
-        description: "Code cannot be empty",
-      });
-    if (code.toString().length !== 6)
-      return toast({
-        variant: "destructive",
-        description: `Code should ${
+    if (code === null) return setError("Code cannot be empty");
+
+    const codeStr = code.toString();
+    if (codeStr.length !== 6)
+      return setError(
+        `Code should ${
           code.toString().length < 6 ? "be" : "not exceed"
-        } 6 digits`,
-      });
-    if (isNaN(Number(code))) {
-      return toast({
-        variant: "destructive",
-        description: "Code can only be numbers",
-      });
+        } 6 digits`
+      );
+
+    if (!/^\d{6}$/.test(codeStr)) {
+      setError("Code can only be numbers");
+      return;
     }
     setLoader(true);
     try {
       const res: Response = await GetFile({ code });
       const { error, message, file } = res;
-      if (error)
-        return toast({
-          variant: "destructive",
-          description: message,
-        });
+      if (error) setError(message);
       if (file) {
         const { url, name } = file;
         const { error, message } = await handleDownloadFile({ url, name });
-        toast({
-          variant: error ? "destructive" : "default",
-          description: message,
-        });
-        !error && setSuccess(true);
+        if (error) {
+          setError(message);
+        } else {
+          setSuccess(true);
+          toast({
+            variant: "default",
+            description: message,
+          });
+        }
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        description: "Failed to download the file",
-      });
+      setError("Failed to download the file");
     } finally {
       setLoader(false);
     }
   };
 
-  return { fetchData, loader, success };
+  return { fetchData, loader, success, Error };
 };
 
 export default useVerifyAndDownload;

@@ -14,7 +14,7 @@ export const Hero: React.FC = () => {
   );
 
   return (
-    <div className="container   mx-auto px-4 py-8 md:py-16">
+    <div className="container     overflow-hidden  mx-auto px-4  py-10">
       {operation === "none" && (
         <h1 className="text-2xl md:text-4xl  py-6 lg:text-5xl font-extrabold text-center mb-8 md:mb-16">
           Send Your Files without Hassle
