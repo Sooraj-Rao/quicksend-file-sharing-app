@@ -258,7 +258,7 @@ function FileDetails({
   const ShortenUrl = async (url: string) => {
     const apiKey = "quklnk_OQPmKajmPrjrsRGIuVzmVDtk";
     setLoading(true);
-    fetch("https://sj1.xyz/api", {
+    fetch("https://srao.site/api", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
