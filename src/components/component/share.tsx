@@ -12,26 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  ArrowLeft,
-  Copy,
-  File,
-  Link,
-  Loader,
-  Loader2,
-  Upload,
-  X,
-} from "lucide-react";
+import { Copy, File, Loader2, Upload, X } from "lucide-react";
 import { filesize } from "filesize";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
-import { app } from "@/shared/libs/config/firebase";
 import { StoreFile } from "@/actions/store.file";
 import { useZustandStore } from "./zustand.store";
 import { fetchData } from "./fetch-data";
@@ -50,20 +33,16 @@ type ShareFileProps = {
   operation: string;
 };
 
-const URL = "https://quicksend.soorajrao.in";
-
 export default function ShareFile({ setOperation, operation }: ShareFileProps) {
   const [selectedFile, setSelectedFile] = useState<SelectedFile | null>(null);
   const [secretCode, setSecretCode] = useState<number | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadState, setUploadState] = useState("none");
   const { Ref } = useZustandStore();
 
   const SendData = (data: string) => {
     fetchData(data, Ref || "search", "quicksend_share_file", "none");
   };
 
-  const storage = getStorage(app);
   const { toast } = useToast();
 
   const handleUploadFile = async (downloadURL: string) => {
@@ -84,65 +63,54 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
       const res = await StoreFile(reqData);
       const { error, message, code } = res;
       if (error) {
+        setUploadState("failed");
         toast({
           variant: "destructive",
           description: message,
         });
       } else if (code) {
+        setUploadState("done");
         setSecretCode(code);
       }
     } catch (error) {
+      setUploadState("failed");
       toast({
         variant: "destructive",
         description: "Upload failed.Try after some time",
       });
-    } finally {
-      setUploadProgress(0);
     }
-  };
-
-  const uploadFile2 = (file: SelectedFile) => {
-    setIsUploading(true);
-    const metadata = { contentType: file.type };
-    const storageRef = ref(storage, `file-upload/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setUploadProgress(progress);
-      },
-      (error) => {
-        setSelectedFile(null);
-        toast({
-          variant: "destructive",
-          description: "Upload failed",
-        });
-        setIsUploading(false);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          handleUploadFile(downloadURL);
-          setIsUploading(false);
-        });
-      }
-    );
   };
 
   const uploadFile = async (file: SelectedFile) => {
     try {
+      setUploadState("uploading");
       const form = new FormData();
       form.append("file", file);
-      const res = await axios.post("https://cdn.soorajrao.in/api/upload",form,{
-        headers:{
-          'Authorization':'djashkaksdjlansdjgvadshbdajsgdvkhbjasnljdja'
+      const res = await axios.post(
+        "https://cdn.soorajrao.in/api/upload",
+        form,
+        {
+          headers: {
+            Authorization: "djashkaksdjlansdjgvadshbdajsgdvkhbjasnljdja",
+          },
         }
-      });
-      console.log(res.data)
+      );
+
+      if (res.data.success) {
+        handleUploadFile(res.data.fileUrl);
+      } else {
+        setUploadState("failed");
+        toast({
+          variant: "destructive",
+          description: "Upload failed",
+        });
+      }
     } catch (error) {
-      console.log(error)
+      setUploadState("failed");
+      toast({
+        variant: "destructive",
+        description: "Upload failed",
+      });
     }
   };
 
@@ -161,7 +129,6 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
     setSelectedFile(null);
     setOperation("upload");
     setSecretCode(null);
-    setUploadProgress(0);
   };
 
   return (
@@ -181,8 +148,7 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
         ) : (
           <FileDetails
             file={selectedFile}
-            uploadProgress={uploadProgress}
-            isUploading={isUploading}
+            uploadState={uploadState}
             secretCode={secretCode}
             onUpload={() => uploadFile(selectedFile)}
             onCopy={copyToClipboard}
@@ -237,16 +203,14 @@ function FileUploader({
 
 function FileDetails({
   file,
-  uploadProgress,
-  isUploading,
+  uploadState,
   secretCode,
   onUpload,
   onCopy,
   onReset,
 }: {
   file: SelectedFile;
-  uploadProgress: number;
-  isUploading: boolean;
+  uploadState: string;
   secretCode: number | null;
   onUpload: () => void;
   onCopy: (item: number | string) => void;
@@ -283,7 +247,7 @@ function FileDetails({
         </div>
         {!secretCode && (
           <Button
-            disabled={isUploading}
+            disabled={uploadState == "none"}
             variant="ghost"
             size="icon"
             onClick={onReset}
@@ -293,7 +257,7 @@ function FileDetails({
         )}
       </div>
 
-      {!isUploading && !secretCode && uploadProgress == 0 && (
+      {uploadState == "none" && !secretCode && (
         <Button
           onClick={onUpload}
           disabled={secretCode ? true : false}
@@ -304,15 +268,10 @@ function FileDetails({
         </Button>
       )}
 
-      {isUploading && (
+      {uploadState == "uploading" && (
         <div className="space-y-2">
-          <Progress value={uploadProgress} className="w-full" />
           <div className=" flex items-center justify-center gap-x-2 mt-2">
-            <p className="text-sm text-center">
-              {uploadProgress.toFixed(0) == "0"
-                ? "Uploading.."
-                : `${uploadProgress.toFixed(0)}% Uploaded`}
-            </p>
+            <p className="text-sm text-center">Uploading..</p>
             <Loader2 size={16} className=" animate-spin" />
           </div>
         </div>
@@ -349,8 +308,7 @@ function FileDetails({
           </div>
         </div>
       ) : (
-        uploadProgress === 100 &&
-        !isUploading && (
+        uploadState == "done" && (
           <h1 className=" flex items-center gap-x-2">
             Generating code..
             <Loader2 size={20} className=" animate-spin" />

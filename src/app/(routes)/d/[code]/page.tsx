@@ -17,7 +17,7 @@ const DownloadPageCode = ({
   }, [code]);
 
   return (
-    <div className="flex text-xl flejx-col  items-center justify-center  mt-32">
+    <div className="flex text-xl flex-col  items-center justify-center  mt-32">
       <div className=" flex gap-x-2">
         {!success && loader && <h1>Fetching File...</h1>}
         {loader && <Loader className=" animate-spin" />}

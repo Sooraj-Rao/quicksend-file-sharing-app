@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { GetFile, Response } from "@/actions/getfile";
 import { useToast } from "@/components/ui/use-toast";
 import { usePathname } from "next/navigation";
-import { handleDownloadFile } from "@/components/component";
 
 const useVerifyAndDownload = ({ code }: { code: number | null }) => {
   const [loader, setLoader] = useState(false);
@@ -39,7 +38,13 @@ const useVerifyAndDownload = ({ code }: { code: number | null }) => {
       if (error) setError(message);
       if (file) {
         const { url, name } = file;
-        const { error, message } = await handleDownloadFile({ url, name });
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = name; 
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
         if (error) {
           setError(message);
         } else {

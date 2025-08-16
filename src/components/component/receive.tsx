@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
-import { handleDownloadFile } from "./download-file";
 import { GetFile } from "@/actions/getfile";
 import { fetchData } from "./fetch-data";
 import { useZustandStore } from "./zustand.store";
@@ -84,16 +83,13 @@ export function RecieveFile() {
         handleError(STATUS.EXPIRED, "Code is invalid or expired");
         return;
       }
-
       setDownloadStatus(STATUS.DOWNLOADING);
-      const downloadResult = await handleDownloadFile({
-        url: file.url,
-        name: file.name,
-      });
-
-      if (downloadResult.error) {
-        throw new Error(downloadResult.message);
-      }
+      const link = document.createElement("a");
+      link.href = file.url;
+      link.download = file.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
       setDownloadStatus(STATUS.SUCCESS);
     } catch (error) {
