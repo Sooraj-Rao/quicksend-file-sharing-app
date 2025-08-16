@@ -1,4 +1,3 @@
-export * from "./download-file";
 export * from "./home";
 export * from "./receive";
 export * from "./share";
