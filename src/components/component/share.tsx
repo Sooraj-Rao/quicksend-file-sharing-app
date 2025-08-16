@@ -35,6 +35,7 @@ import { app } from "@/shared/libs/config/firebase";
 import { StoreFile } from "@/actions/store.file";
 import { useZustandStore } from "./zustand.store";
 import { fetchData } from "./fetch-data";
+import axios from "axios";
 
 type SelectedFile = Blob & {
   name: string;
@@ -100,7 +101,7 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
     }
   };
 
-  const uploadFile = (file: SelectedFile) => {
+  const uploadFile2 = (file: SelectedFile) => {
     setIsUploading(true);
     const metadata = { contentType: file.type };
     const storageRef = ref(storage, `file-upload/${file.name}`);
@@ -128,6 +129,21 @@ export default function ShareFile({ setOperation, operation }: ShareFileProps) {
         });
       }
     );
+  };
+
+  const uploadFile = async (file: SelectedFile) => {
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await axios.post("https://cdn.soorajrao.in/api/upload",form,{
+        headers:{
+          'Authorization':'djashkaksdjlansdjgvadshbdajsgdvkhbjasnljdja'
+        }
+      });
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const copyToClipboard = async (item: number | string) => {

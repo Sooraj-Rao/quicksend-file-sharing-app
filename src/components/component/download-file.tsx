@@ -7,11 +7,10 @@ export const handleDownloadFile = async ({
 }): Promise<{ error: boolean; message: string }> => {
   try {
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
+    
     const contentType = response.headers.get("content-type");
     const blob = await response.blob();
     const dataUrl = window.URL.createObjectURL(blob);
