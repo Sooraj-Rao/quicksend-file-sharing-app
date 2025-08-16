@@ -26,7 +26,11 @@ export function Footer() {
 
   return (
     <footer className="  fixed bottom-0 left-0 py-4  w-full sm:flex-row flex-col   sm:gap-0 gap-4 flex items-center justify-around">
-      <div className="bg-background cursor-default border hover:bg-accent/20 border-primary/10 rounded-md px-4 py-2 flex items-center space-x-3">
+      <div
+        className={`bg-background cursor-default border hover:bg-accent/20 border-primary/10 rounded-md px-4 py-2 flex items-center space-x-3
+        ${views ? " visible" : "invisible"}
+        `}
+      >
         <span className=" h-2 w-2 animate-pulse bg-primary rounded-full"></span>
         <div className="flex  items-center gap-x-3 dark:text-purple-300 text-purple-900 ">
           <span className="text-xs  text-foreground ">Site Views</span>
@@ -42,7 +46,9 @@ export function Footer() {
       >
         <p className=" text-sm  group-hover:scale-105 duration-200 flex items-center gap-x-2 ">
           Developed by
-          <span className=" text-primary dark:text-purple-400 font-medium">Sooraj</span>
+          <span className=" text-primary dark:text-purple-400 font-medium">
+            Sooraj
+          </span>
           <ArrowLeft className="h-4  w-4 text-foreground/50 sm:invisible hidden sm:block  sm:group-hover:visible rotate-[135deg]" />
         </p>
       </a>
