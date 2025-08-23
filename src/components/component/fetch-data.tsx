@@ -15,48 +15,15 @@ export const fetchData = async (
   if (token == eventType) return;
   if (ref === process.env.NEXT_PUBLIC_USER!) return;
 
-  let somedata = { additionalData };
-  if (!Cookies.get("loc")) {
-    somedata = await FetchSomeData();
-    Cookies.set("loc", "done");
-    somedata.additionalData = additionalData || "none";
-  }
   const Server = process.env.NEXT_PUBLIC_API!;
   const res = await axios.post(Server, {
     eventType: eventType.trim(),
     ref,
     utm_source,
-    additionalData: JSON.stringify(somedata),
+    additionalData: JSON.stringify(additionalData),
   });
   const { error } = res.data;
   if (!error) {
     Cookies.set(eventType, eventType);
   }
-};
-
-const FetchSomeData = async () => {
-  const fetchData = async () => {
-    const Server2 = process.env.NEXT_PUBLIC_API2!;
-    try {
-      const response = await fetch(Server2);
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  let data = await fetchData();
-  if (data) {
-    const { city, latitude, longitude, country, org, ip } = data;
-    data = {
-      city,
-      latlong: `${latitude},${longitude}`,
-      country,
-      org,
-      ip,
-    };
-  }
-
-  return data;
 };
